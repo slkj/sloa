@@ -1,0 +1,44 @@
+package cn.slkj.sloa.service.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+
+import cn.slkj.sloa.entity.Orders;
+import cn.slkj.sloa.mapper.OrderMapper;
+import cn.slkj.sloa.service.OrderService;
+
+@Repository
+public class OrderServiceImpl implements OrderService {
+	@Autowired
+	private OrderMapper mapper;
+
+	@Override
+	public List<Orders> getAll(Map<String, Object> map, PageBounds pageBounds) {
+		return mapper.getAll(map, pageBounds);
+	}
+
+	@Override
+	public int update(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int pay(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int add(Orders orders) {
+		// TODO Auto-generated method stub
+		return mapper.add(orders);
+	}
+
+ 
+}

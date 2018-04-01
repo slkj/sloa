@@ -1,0 +1,30 @@
+package cn.slkj.sloa.service.impl;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import cn.slkj.sloa.entity.system.Company;
+import cn.slkj.sloa.mapper.CompanyMapper;
+import cn.slkj.sloa.service.CompanyService;
+
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+
+@Service
+@Transactional
+public class CompanyServiceImpl implements CompanyService {
+	@Resource
+	private CompanyMapper companyMapper;
+	/**
+	 * 查询下拉列表
+	 */
+	public List<Company> queryComList(HashMap<String, Object> hashMap, PageBounds pageBounds){
+		return companyMapper.queryComList(hashMap, pageBounds);
+	}
+	
+	
+}

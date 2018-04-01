@@ -1,0 +1,398 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>保险管理</title>
+<%@ include file="/common/taglibs.jsp"%>
+<script src="../js/easyui/datagrid-detailview.js" type="text/javascript"></script>
+<script src="../js/DateUtil.js" type="text/javascript"></script>
+<script type="text/javascript">
+	var grid;
+	$(function() {
+	
+		// 加载列表数据
+		loadDataGrid();
+		// 初始化用户操作按钮
+		// 	loadJSPButton();
+		// 点击查询，根据条件检索
+		$("#search_btn").click(function() {
+			$('#listGrid').datagrid({
+				queryParams : {
+					carNumber : $('#cph').val(),
+					policy : $('#policy').val(),
+					endDate1 : $('#endDate1').val(),
+					endDate2 : $('#endDate2').val()
+				}
+			});
+			$('#gridForm').form('clear');
+		});
+	});
+	/*加载数据*/
+	function loadDataGrid() {
+		grid = $('#listGrid')
+				.datagrid(
+						{
+							url : '../insurance/list',
+							fit : true,
+							fitColumns : true,
+							nowrap : true, // false:折行
+							rownumbers : true, // 行号
+							striped : true, // 隔行变色
+							singleSelect : true,
+							checkOnSelect : true,
+							autoRowHeight : false,
+							pagination : true,
+							pageSize : 20,
+							pageList : [ 10, 20, 30, 50, 100 ],
+							loadMsg : '数据加载中,请稍后……',
+						    rowStyler : function(index, row) {
+
+								Date.prototype.diff = function(date) {
+									return (this.getTime() - date.getTime())
+											/ (24 * 60 * 60 * 1000);
+								 }
+								// 构造两个日期，分别是系统时间和2013/04/08 12:43:45
+								var now = new Date();
+								var date = new Date(row.endTime);
+								// 调用日期差方法，求得参数日期与系统时间相差的天数
+								var diff = now.diff(date);
+								// 打印日期差
+								//alert(Math.abs(diff));
+								if (diff > 30){
+									return 'background-color:pink;font-weight:bold;';									
+								}
+							}, 
+							columns : [ [
+									{
+										field : 'vehicleNumber',
+										title : '车牌号',
+										width : 50
+									},
+									{
+										field : 'policy',
+										title : '保单号',
+										width : 50
+									},
+									{
+										field : 'startTime',
+										title : '开始时间',
+										width : 50
+									},
+									{
+										field : 'endTime',
+										title : '到期时间',
+										width : 50
+									},
+									{
+										field : 'insuranceType',
+										title : '保险类型',
+										width : 50
+									},
+									{
+										field : 'feiyong',
+										title : '费用',
+										align : 'right',
+										styler : function(value, row, index) {
+											return 'color:red;';
+										},
+										formatter : function(val, row, index) {
+											if(val!=null)
+											return '&yen; ' + row.feiyong;
+
+										}
+									},
+									{
+										field : 'checkMan',
+										title : '核保人',
+										width : 50
+									},
+									{
+										field : 'remark',
+										title : '备注',
+										width : 50
+									},
+									{
+										title : '操作',
+										field : '_opt',
+										width : 50,
+										align : 'center',
+										formatter : function(value, row, index) {
+											var s = "";
+											s += "<a href=\"javascript:void(0)\"><span onclick=\"javaScript:openWin(1);\">保险登记</span></a>";
+											s += "&nbsp;|&nbsp;";
+											s += "<a href=\"javascript:void(0)\"><span onclick=\"javaScript:openWin(2);\">编辑</span></a>";
+											s += "&nbsp;|&nbsp;";
+											s += "<a href=\"javascript:void(0)\"><span onclick=\"javaScript:remove();\">删除</span></a>";
+											return s;
+										}
+									}  ] ],
+							view : detailview,
+							detailFormatter : function(index, row) {
+								return '<div style="padding:5px"><table id="tbfeesItem-' + index + '"></table></div>';
+							},
+							onExpandRow : function(index, row) {
+								 $('#tbfeesItem-' + index)
+										.datagrid(
+												{
+													url : '../insurance/listByCarNumber',
+													queryParams : {
+														vId : row.vId
+													},
+													fitColumns : true,
+													singleSelect : true,
+													rownumbers : true,
+													loadMsg : '数据加载中,请稍后……',
+													height : 'auto',
+													pagination : true,
+													pageSize : 20,
+													pageList : [ 10, 20, 30,
+															50, 100 ],
+													columns : [ [
+													{
+														field : 'policy',
+														title : '保单号',
+														width : 50
+													},
+													{
+														field : 'startTime',
+														title : '开始时间',
+														width : 50
+													},
+													{
+														field : 'endTime',
+														title : '到期时间',
+														width : 50
+													},
+													{
+														field : 'typeName',
+														title : '保险类型',
+														width : 50
+													},
+													{
+														field : 'feiyong',
+														title : '费用',
+														align : 'right',
+														styler : function(value, row, index) {
+															return 'color:red;';
+														},
+														formatter : function(val, row, index) {
+															return '&yen; ' + row.feiyong;
+													
+														}
+													},
+													{
+														field : 'checkMan',
+														title : '核保人',
+														width : 50
+													}] ],
+													onResize : function() {
+														$('#listGrid')
+																.datagrid(
+																		'fixDetailRowHeight',
+																		index);
+													},
+													onLoadSuccess : function() {
+														setTimeout(
+																function() {
+																	$(
+																			'#listGrid')
+																			.datagrid(
+																					'fixDetailRowHeight',
+																					index);
+																}, 0);
+													}
+												});
+								$('#listGrid').datagrid('fixDetailRowHeight',
+										index); 
+							},
+							/* toolbar : [ {
+								text : '保险登记',
+								iconCls : 'icon-add',
+								handler : function() {
+									openWin(1);
+								}
+							} ], */
+							onLoadSuccess : function() {
+								grid.datagrid('clearSelections');
+							}
+						});
+		// 设置分页控件
+		grid.datagrid('getPager').pagination({
+			beforePageText : '第',// 页数文本框前显示的汉字
+			afterPageText : '页    共 {pages} 页',
+			displayMsg : '当前显示 {from} - {to} 条记录   共 {total} 条记录'
+		});
+	}
+	/*弹出添加窗口*/
+	function openWin(type) {
+		SL.showWindow({
+			title : '保险信息登记',
+			iconCls : 'icon-add',
+			width : 450,
+			height : 420,
+			top : 50,
+			left : 100,
+			url : '../insurance/insuranceAdd',
+			onLoad : function() {
+				loadCarNumOfInsurance('#carNumber');
+				var row = $('#listGrid').datagrid('getSelected');
+				if(type==2){				
+				$('#postForm').form('load',row);
+				}else{
+					$('#carNumber').combogrid('setValue', row.vehicleNumber);
+					$("#vId").val(row.vId);
+				}
+			},
+			buttons : [
+					{
+						text : '确定',
+						iconCls : 'icon-add',
+						handler : function() {
+							if ($("#postForm").form('enableValidation').form(
+									'validate')) {
+								var data = $("#postForm").serialize();
+								if(type==1){
+								$.ajax({
+									cache : false,
+									type : "POST",
+									url : '../insurance/save',
+									data : data,
+									async : false,
+									success : function(data) {
+										if (data) {
+											SL.closeWindow();
+											grid.datagrid('reload');
+										} else {
+											alert("出错了");
+										}
+									}
+								});
+								}
+								else{
+									$.ajax({
+										cache : false,
+										type : "POST",
+										url : '../insurance/edit',
+										data : data,
+										async : false,
+										success : function(data) {
+											if (data) {
+												SL.closeWindow();
+												grid.datagrid('reload');
+											} else {
+												alert("出错了");
+											}
+										}
+									});
+								}
+							}
+						}
+					}, {
+						text : '关闭',
+						handler : function() {
+							SL.closeWindow();
+						}
+					} ]
+		});
+	}
+	
+
+
+	function remove(){
+		var row = $('#listGrid').datagrid('getSelected');
+		if (row){
+			$.messager.confirm('提示','确定要删除该记录吗?',function(r){
+				if (r){
+					$.ajax({
+						url : "../insurance/delete?id=" + row.id,
+						success : function(result) {
+							if (result) {
+								grid.datagrid('load');
+							}else{
+								$.messager.show({
+									title: 'Error',
+									msg: result.msg
+								});
+							}
+						}
+					});
+				}
+			});
+		}
+	}
+	
+	function loadCarNumOfInsurance(id) {
+	$(id).combogrid({
+		delay:2000,
+		required : true,
+		panelWidth : 500,
+		idField : 'carNumber',
+		textField : 'carNumber',
+		url : '../vehicle/list',
+		loadMsg : '数据加载中,请稍后……',
+		onChange : function(newValue, oldValue) {
+			artChanged = true;//记录是否有改变（当手动输入时发生)
+		},
+		columns : [ [ 
+		{
+			field : 'carNumber',
+			title : '车牌号',
+			width : 50
+		}, {
+			field : 'carOwner',
+			title : '户主',
+			width : 50
+		} ] ],
+		fitColumns : true,
+		pagination : true,
+		pageSize : 20,
+		keyHandler : {
+			up : function() {
+			},
+			down : function() {
+			},
+			enter : function() {
+			},
+			query : function(q) {
+				//动态搜索
+				$(this).combogrid('grid').datagrid('reload', {
+					'carNumber' : q
+				});
+				$(this).combogrid('setValue', q);
+			}
+		},
+		onSelect : function(index, row) {
+			//selectRow = row;
+			$("#vId").val(row.id);
+		}
+	});
+}
+</script>
+<body class="easyui-layout">
+	<div region="north"
+		style="height: 40px; border-bottom: 1px #a7b1c2 dashed; padding: 5px;">
+		<form id="gridForm">
+			<div class="item">
+				<div id="cot">
+					<div class="shang">
+						车牌号：<input type="text" id="cph" style="width: 150px" /> 
+						保单号：<input type="text" id="policy" style="width: 150px" />
+						 到期时间：<input id="endDate1"
+							class="Wdate" type="text"
+							onFocus="WdatePicker({isShowClear:false,readOnly:true})" /> - <input
+							id="endDate2" class="Wdate" type="text"
+							onFocus="WdatePicker({isShowClear:false,readOnly:true})" />
+					 <a id="search_btn" href="#" class="easyui-linkbutton"
+							data-options="iconCls:'icon-search'">查询</a>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div region="center">
+		<table id="listGrid"></table>
+	</div>
+</body>
+</html>

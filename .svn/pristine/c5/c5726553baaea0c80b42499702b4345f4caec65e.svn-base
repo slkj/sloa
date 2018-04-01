@@ -1,0 +1,116 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form id="postForm" metdod="post">
+		<table class="grid" style="width: 100%">
+			<tr>
+				<th style="text-align: center;" width="40%">车辆信息</th>
+
+				<th style="text-align: center;" width="60%">缴费信息</th>
+			</tr>
+			<tr>
+				<td style="padding: 0px 0px 0px 0px; vertical-align: top;">
+					<table class="grid" height="100%">
+
+						<tr>
+							<th width="70px">车牌号：</th>
+							<td><input id="carNumberCombx" name="carNumber" style="width: 200px" /></td>
+						</tr>
+
+						<tr>
+							<th width="70px">到期时间：</th>
+							<td><span id="feeseEnd"></span></td>
+						</tr>
+						<tr>
+							<th width="70px">设备ID：</th>
+							<td height="23px"><span id="deviceId"></span></td>
+						</tr>
+						<tr>
+							<th>证明编号：</th>
+							<td height="23px"><span id="networkNo"></span></td>
+						</tr>
+						<tr>
+							<th>SIM卡：</th>
+							<td height="23px"><span id="simId"></span></td>
+						</tr>
+						<tr>
+							<th>车主姓名：</th>
+							<td><span id="contactsText"></span></td>
+						</tr>
+						<tr>
+							<th>联系电话：</th>
+							<td height="22px"><span id="contactsTelText"></span></td>
+						</tr>
+						<tr>
+							<th>企业名称：</th>
+							<td height="23px"><span id="carOwnerText"></span></td>
+						</tr>
+					</table>
+				</td>
+				<td style="padding: 0px 0px 0px 0px; vertical-align: top;">
+					<table class="grid" height="100%">
+						<tr>
+							<th width="70px">项目：</th>
+							<td colspan="2"><label><input name="purpose" type="radio" value="0" checked="checked" />新装</label> <label><input name="purpose" type="radio" value="1" />续费</label> <label><input
+									name="purpose" type="radio" value="2" />维修</label></td>
+						</tr>
+						<tr>
+							<th width="70px">设备ID：</th>
+							<td><input id="deviceNumber" name="deviceNumber" class="easyui-textbox" style="width: 200px" /></td>
+							<td><input id="devicePice" name="devicePice" type="text" style="width: 80px" onblur="toTotal()" />元</td>
+						</tr>
+						<tr>
+							<th>证明编号：</th>
+							<td><input id="proveNumber" name="proveNumber" class="easyui-textbox" style="width: 200px" /></td>
+							<td><input id="provePice" name="provePice" type="text" style="width: 80px" onblur="toTotal()" />元</td>
+						</tr>
+						<tr>
+							<th>服务期限：</th>
+							<td colspan="2"><input type="text" id="startTime" name="startTime" class="Wdate" style="width: 90px"
+								onFocus="var endDate=$dp.$('endTime');WdatePicker({onpicked:function(){endTime.focus();},dateFmt:'yyyy-MM',maxDate:'#F{$dp.$D(\'endTime\')}'})" /> - <input name="endTime" type="text"
+								id="endTime" class="Wdate" style="width: 90px" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'startTime\')}',dateFmt:'yyyy-MM'})" /></td>
+						</tr>
+						<tr>
+							<th>SIM卡：</th>
+							<td><input name="simNumber" class="easyui-textbox" style="width: 200px" /></td>
+							<td><input id="simPice" name="simPice" type="text" style="width: 80px" onblur="toTotal()" />元</td>
+						</tr>
+						<tr>
+							<th>司机卡1：</th>
+							<td><input name="cardNumber" class="easyui-textbox" style="width: 200px" /></td>
+							<td><input id="cardPice" name="cardPice" type="text" style="width: 80px" onblur="toTotal()" />元</td>
+						</tr>
+						<tr>
+							<th>司机卡2：</th>
+							<td><input name="cardNumber1" class="easyui-textbox" style="width: 200px" /></td>
+							<td><input id="cardPice1" name="cardPice1" type="text" style="width: 80px" onblur="toTotal()" />元</td>
+						</tr>
+						<tr>
+							<th>维修费：</th>
+							<td><input id="feesText" name="fees" class="easyui-textbox" style="width: 200px" /></td>
+							<td><input id="feesPice" name="feesPice" type="text" style="width: 80px" onblur="toTotal()" />元</td>
+						</tr>
+						<!-- 					<tr> -->
+						<!-- 						<th>司机卡3：</th> -->
+						<!-- 						<td><input name="number" class="easyui-textbox" style="width: 200px" /></td> -->
+						<!-- 						<td><input id="" name="numbers" class="easyui-numberbox" style="width: 80px" data-options="prefix:'¥'" />元</td> -->
+						<!-- 					</tr> -->
+					</table>
+				</td>
+			</tr>
+
+			<tr>
+				<td style="text-align: center;" colspan="4">收费人员：<input id="agent" name="agent" class="easyui-textbox" style="width: 200px;" data-options="required:true" value="${sessionUser.realname }">
+					收费时间：<input id="riqi" name="riqi" class="Wdate" type="text" style="width: 100px;" onFocus="WdatePicker({isShowClear:false,readOnly:true})" /> 合计：<input id="totalPice" class="easyui-numberbox"
+					style="width: 80px" />元
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

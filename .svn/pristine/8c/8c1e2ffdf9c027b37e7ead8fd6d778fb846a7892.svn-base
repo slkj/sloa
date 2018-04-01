@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width"/>
+<meta name="viewport" content="initial-scale=1.0,user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+ <link rel="stylesheet" type="text/css" href="css/list.css"/>
+<title>公务员管理</title>
+</head>
+
+<body>
+<div class="header"><p><a href=""><img src="images/button_03.png" class="left"/></a><span>公务员管理</span><a href=""><img src="images/button_05.png" class="right"/></a></p></div>
+<!------------内容一项开始------------->
+<div class="gongwuyuan">
+        
+        	<div class="pic"><img src="images/list_pic_03.png"  width="70"/></div>
+        	<div class="neirong"> 
+                <p>综合管理类公务员非领导职务设置参照公务员法管理机关（单位）工作人员审批</p>
+            </div>
+            <a href="text.html">  <div class="detail"><p>查看详情</p></div>
+         </a>
+   </div>
+            <div style="clear:both;"></div>
+  <!---------------------内容一项结束------------------------->    
+  <!------------内容一项开始------------->
+<div class="gongwuyuan">
+          
+        	<div class="pic"><img src="images/list_pic_03.png"  width="70"/></div>
+        	<div class="neirong"> 
+                <p>综合管理类公务员非领导职务设置参照公务员法管理机关（单位）工作人员审批</p>
+            </div>
+            <a href="text.html"> <div class="detail"><p>查看详情</p></div>
+         </a>
+   </div>
+            <div style="clear:both;"></div>
+  <!---------------------内容一项结束------------------------->    
+  <!------------内容一项开始------------->
+<div class="gongwuyuan">
+        
+        	<div class="pic"><img src="images/list_pic_03.png"  width="70"/></div>
+        	<div class="neirong"> 
+                <p>综合管理类公务员非领导职务设置参照公务员法管理机关（单位）工作人员审批</p>
+            </div>
+          <a href="text.html">    <div class="detail"><p>查看详情</p></div>
+         </a>
+   </div>
+            <div style="clear:both;"></div>
+  <!---------------------内容一项结束------------------------->    
+  <!------------内容一项开始------------->
+<div class="gongwuyuan">
+     
+        	<div class="pic"><img src="images/list_pic_03.png"  width="70"/></div>
+        	<div class="neirong"> 
+                <p>综合管理类公务员非领导职务设置参照公务员法管理机关（单位）工作人员审批</p>
+            </div>
+              <a href="text.html">    <div class="detail"><p>查看详情</p></div>
+         </a>
+   </div>
+            <div style="clear:both;"></div>
+  <!---------------------内容一项结束------------------------->    
+  <!------------内容一项开始------------->
+<div class="gongwuyuan">
+        
+        	<div class="pic"><img src="images/list_pic_03.png"  width="70"/></div>
+        	<div class="neirong"> 
+                <p>综合管理类公务员非领导职务设置参照公务员法管理机关（单位）工作人员审批</p>
+            </div>
+         <a href="text.html">      <div class="detail"><p>查看详情</p></div>
+         </a>
+   </div>
+            <div style="clear:both;"></div>
+  <!---------------------内容一项结束------------------------->    
+  <!------------内容一项开始------------->
+<div class="gongwuyuan">
+      
+        	<div class="pic"><img src="images/list_pic_03.png"  width="70"/></div>
+        	<div class="neirong"> 
+                <p>综合管理类公务员非领导职务设置参照公务员法管理机关（单位）工作人员审批</p>
+            </div>
+              <a href="text.html">   <div class="detail"><p>查看详情</p></div>
+         </a>
+   </div>
+            <div style="clear:both;"></div>
+  <!---------------------内容一项结束------------------------->     
+           
+ <div class="foot"><p>技术支持：信泽华科技</p></div>
+</body>
+</html>

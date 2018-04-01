@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.slkj.sloa.mapper.InsuranceMapper">
+    <sql id="sql_temp">
+        id, policy,vid, feiyong, insuranceType,       
+        riqi, startTime, endTime, insuranceCompany, checkMan, makeMan, remark,
+        (SELECT CARNUMBER FROM OA_VEHICLE WHERE ID= VID) AS
+        vehicleNumber
+    </sql>
+	<select id="getList" parameterType="hashmap" resultType="Insurance">
+		SELECT OA_INSURANCE.id,policy,feiyong, insuranceType,       
+        riqi, startTime, OA_INSURANCE.endTime, insuranceCompany, checkMan, makeMan, remark,
+        OA_VEHICLE.CARNUMBER as vehicleNumber,OA_VEHICLE.id as vId
+       FROM OA_INSURANCE
+        RIGHT JOIN (
+		SELECT
+		vid,
+		MAX (endTime) AS endTime
+		FROM
+		OA_INSURANCE
+		GROUP BY
+		OA_INSURANCE.VID
+		)OA_IN ON OA_IN.VID = OA_INSURANCE.VID
+			AND OA_IN.endTime = OA_INSURANCE.endTime
+			  RIGHT JOIN OA_VEHICLE  on OA_VEHICLE.ID= OA_INSURANCE.VID
+		<where>			
+            <if test="policy != null and policy != ''">
+                AND OA_INSURANCE.policy LIKE '%'+#{policy}+'%'
+            </if>
+            <if test="carNumber != null and carNumber != ''">
+                AND OA_VEHICLE.CARNUMBER LIKE '%'+#{carNumber}+'%'
+            </if>
+            <if test="endDate1 != null and endDate1 != ''">
+					<![CDATA[ AND OA_INSURANCE.endTime  >= #{endDate1}]]>
+            </if>
+            <if test="endDate2 != null and endDate2 != ''">
+					<![CDATA[ AND OA_INSURANCE.endTime  <= #{endDate2} ]]>
+            </if>
+            <if test="depId != null and depId != ''">
+				AND OA_VEHICLE.depId IN (SELECT ID FROM F_GETC( #{depId}))
+			</if>   
+        </where>
+    </select>
+	<select id="getListByCarNumber" resultType="Insurance" parameterType="hashmap">
+		SELECT
+		<include refid="sql_temp" />
+		FROM OA_INSURANCE
+		<where>
+			<if test="vId != null  and vId != ''">
+				AND vId = #{vId}
+			</if>
+		</where>
+	</select>
+    <select id="queryOne" parameterType="hashmap" resultType="Insurance">
+        SELECT
+        <include refid="sql_temp" />
+        from OA_INSURANCE
+        <where>
+            <if test="id != null and id != ''">
+                AND id = #{id}
+            </if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="Insurance">
+        INSERT INTO OA_INSURANCE(
+        id,policy, vid, feiyong, insuranceType,riqi, startTime, endTime,
+        insuranceCompany, checkMan, makeMan, remark)
+        VALUES(
+        #{id},#{policy},#{vId},#{feiyong},#{insuranceType},#{riqi},#{startTime},
+        #{endTime},#{insuranceCompany},#{checkMan},#{makeMan},#{remark})
+    </insert>
+
+    <update id="edit" parameterType="Insurance">
+        UPDATE OA_INSURANCE set policy=#{policy}, vid=#{vId}, feiyong=#{feiyong},
+        insuranceType=#{insuranceType},
+        riqi=#{riqi}, startTime=#{startTime}, endTime=#{endTime},
+        insuranceCompany=#{insuranceCompany},
+        checkMan=#{checkMan}, makeMan=#{makeMan}, remark=#{remark} where id = #{id}
+    </update>
+
+
+    <delete id="deletes" parameterType="list">
+        DELETE FROM OA_INSURANCE WHERE ID in
+        <foreach item="ids" collection="array" open="("
+            separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+    <delete id="delete" parameterType="string">
+        DELETE FROM OA_INSURANCE WHERE ID = #{id}
+    </delete>
+    
+
+  <!--   <select id="queryAllTypeList" resultType="InsuranceType">
+        SELECT ID,TYPENAME,REMARK FROM OA_INSURANCE_TYPE
+    </select>
+    <select id="queryAllInsuranceCompanyList" resultType="insuranceCompany">
+        SELECT id, companyName, shortName, linkman, phone, address FROM
+        OA_INSURANCE_COMPANY
+    </select>
+
+
+   
+    <insert id="saveCompany" parameterType="InsuranceCompany">
+        INSERT INTO OA_insurance_company
+        (companyName,shortName,linkman,phone,address)
+        VALUES
+        (#{companyName},#{shortName},#{linkman},#{phone},#{address})
+    </insert>
+    <insert id="saveType" parameterType="InsuranceType">
+        INSERT INTO OA_insurance_type
+        (typeName,remark)
+        VALUES
+        (#{typeName},#{remark})
+    </insert>
+     -->
+
+</mapper>

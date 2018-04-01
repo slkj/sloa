@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.slkj.sloa.mapper.TransferMapper">
+	<sql id="sql_temp">
+		id, vId, transferType, oldCarNumber, oldDevice, oldSIM, oldCompany, 
+		oldOwner, oldPhone, newCarNumber, newDevice, newSIM, newCompany, 
+		newOwner, newPhone, riqi, reason,
+        (SELECT CARNUMBER FROM OA_VEHICLE WHERE ID= VID) AS vehicleNumber		
+	</sql>
+	<select id="getList" resultType="Transfer" parameterType="hashmap">
+		SELECT OA_TRANSFER.id,transferType,newCarNumber,newOwner, newPhone, riqi, reason,
+        OA_VEHICLE.CARNUMBER as oldCarNumber,OA_VEHICLE.id as vId,
+        OA_VEHICLE.carOwner as oldOwner,OA_VEHICLE.contactsTel as oldPhone
+       FROM OA_TRANSFER RIGHT JOIN OA_VEHICLE  on OA_VEHICLE.ID= OA_TRANSFER.VID
+		<where>
+			<if test="carNumber != null and carNumber != ''">
+				AND OA_VEHICLE.CARNUMBER LIKE '%'+#{carNumber}+'%'
+			</if>
+			<if test="transferType != null and transferType != ''">
+				AND OA_TRANSFER.transferType = #{transferType}
+			</if>
+			<if test="endDate1 != null and endDate1 != ''">
+					<![CDATA[ AND OA_TRANSFER.riqi  >= #{endDate1}]]>
+            </if>
+            <if test="endDate2 != null and endDate2 != ''">
+					<![CDATA[ AND OA_TRANSFER.riqi  <= #{endDate2} ]]>
+            </if>
+            <if test="depId != null and depId != ''">
+				AND OA_VEHICLE.depId IN (SELECT ID FROM F_GETC( #{depId}))
+			</if>   
+		</where>
+	</select>
+	<select id="queryOne" resultType="Transfer" parameterType="string">
+		SELECT
+		<include refid="sql_temp" />
+		FROM OA_transfer WHERE id = #{id}
+	</select>
+
+	<insert id="save" parameterType="Transfer">
+		INSERT INTO OA_Transfer (id,
+		vId, transferType, oldCarNumber, oldDevice, oldSIM, 
+		oldCompany, oldOwner, oldPhone, newCarNumber, newDevice, newSIM,
+		 newCompany, newOwner, newPhone, riqi, reason)
+		VALUES(
+		#{id},#{vId},#{transferType},#{oldCarNumber},#{oldDevice},#{oldSIM},
+		#{oldCompany},#{oldOwner},#{oldPhone},#{newCarNumber},#{newDevice},#{newSIM},
+		#{newCompany},#{newOwner},#{newPhone},#{riqi},#{reason})
+	</insert>
+
+	<update id="edit" parameterType="Transfer">
+		UPDATE OA_Transfer SET
+		transferType=#{ transferType}, oldCarNumber=#{
+		oldCarNumber},oldDevice=#{oldDevice},oldSIM=#{oldSIM},
+		oldCompany=#{oldCompany},oldOwner=#{oldOwner},oldPhone=#{oldPhone},
+		newCarNumber=#{ newCarNumber},newDevice=#{newDevice},newSIM=#{newSIM},
+		newCompany=#{newCompany},newOwner=#{newOwner},newPhone=#{newPhone},riqi=#{riqi},
+		reason=#{reason}
+		WHERE ID= #{id}
+	</update>
+
+	<delete id="delete" parameterType="string">
+		DELETE FROM OA_Transfer WHERE ID
+		= #{id}
+	</delete>
+
+
+
+
+</mapper>

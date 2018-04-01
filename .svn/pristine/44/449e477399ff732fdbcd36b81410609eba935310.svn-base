@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.slkj.sloa.mapper.CallMapper">
+	<sql id="sql_base">
+		ID,askName,number,callTime,conversation,answerName,transferName,
+		DEPARTMENT,(SELECT D_NAME FROM
+		OA_DEPARTMENT WHERE ID = DEPARTMENT) AS
+		DEPARTMENTNAME
+	</sql>
+
+	<select id="getAll" resultType="Call" >
+		SELECT
+		<include refid="sql_base"></include>
+		FROM OA_CALL
+		<where>
+			<if test="askName != null and askName != ''">AND askName like '%'+#{askName}+'%'</if>
+			<if test="number != null and number != ''">AND number >= #{number} </if>
+			<if test="department != null and department != ''">
+				AND DEPARTMENT IN (SELECT ID FROM F_GETC( #{department}))
+				<!-- OR DEPARTMENT =#{department} -->
+			</if>
+			<if test="callTime != null and callTime != ''"> AND callTime &lt;= #{callTime} </if>
+			<if test="conversation != null and conversation != ''">AND conversation >= #{conversation} </if>
+			<if test="answerName != null and answerName != ''"> AND answerName &lt;= #{answerName} </if>
+			<if test="transferName != null and transferName != ''">AND transferName >= #{transferName} </if>
+
+		</where>
+	</select>
+
+	<insert id="insert" parameterType="Call"> 
+		INSERT INTO OA_CALL
+		(askName,number,department,callTime,conversation,answerName,transferName)
+		VALUES(
+		#{askName},#{number},#{department},#{callTime},#{conversation},#{answerName},#{transferName}) 
+	</insert>
+	
+	<delete id="delete" parameterType="string">
+		DELETE FROM OA_CALL WHERE ID
+		= #{id}
+	</delete>
+
+</mapper>

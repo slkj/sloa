@@ -1,0 +1,48 @@
+package cn.slkj.sloa.service.impl;
+
+/**
+ * 派工登记 serviceImpl
+ * 
+ * @author xiaotianliang
+ *
+ */
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+
+import cn.slkj.sloa.entity.shfw.Dispatch;
+import cn.slkj.sloa.mapper.DispatchMapper;
+import cn.slkj.sloa.service.DispatchService;
+
+@Repository
+public class DispatchServiceImpl implements DispatchService {
+	@Autowired
+	private DispatchMapper mapper;
+
+	@Override
+	public List<Dispatch> getAll(HashMap<String, Object> map,
+			PageBounds pageBounds) {
+		return mapper.getAll(map, pageBounds);
+	}
+
+	@Override
+	public int insert(Dispatch dispatch) {
+		return mapper.insert(dispatch);
+	}
+
+	@Override
+	public int delete(String id) {
+		return mapper.delete(id);
+	}
+
+	@Override
+	public Dispatch queryOne(Map<String, Object> map) {
+		return mapper.queryOne(map);
+	}
+
+}

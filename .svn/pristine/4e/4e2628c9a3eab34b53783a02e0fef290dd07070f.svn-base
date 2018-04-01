@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.slkj.sloa.mapper.DispatchMapper">
+	<sql id="sql_base">
+		ID,TYPE,REPAIRTIME,CARNUMBER,DEVICEID,SIM,OWNER,TELEPHONE
+		,CAUSES,PERSONNEL,PERSONNELPHONE,DISPATCHTIME,
+		OPERATOR, OPERATORTIME,OUTCOME,DISPATCHNUM,CONTACT,
+		PERSONNELNAME,DEPARTMENT,PTSTATE
+	</sql>
+	<select id="getAll" resultType="Dispatch" parameterType="hashmap">
+		SELECT
+		<include refid="sql_base"></include>
+		FROM OA_DISPATCH
+		<where>
+			<if test="personnelName != null and personnelName != ''">
+				AND PERSONNELNAME LIKE '%'+#{personnelName}+'%'
+			</if>
+			<if test="department != null and department != ''">
+				AND DEPARTMENT IN (SELECT ID FROM F_GETC( #{department}))
+			</if>
+			<if test="carNumber != null and carNumber != ''">AND CARNUMBER LIKE '%'+#{carNumber}+'%'  </if>
+			<if test="repairTime != null and repairTime != ''">AND REPAIRTIME >= #{repairTime} </if>
+			<if test="repairTime1 != null and repairTime1 != ''"> AND REPAIRTIME &lt;= #{repairTime1} </if>
+			<if test="dispatchNum != null and dispatchNum != ''">
+				AND DISPATCHNUM LIKE '%'+#{dispatchNum}+'%'
+			</if>
+			<if test="type != null and type != ''"> AND type = #{type} </if>
+			<if test="outcome != null and outcome != ''"> AND OUTCOME = #{outcome} </if>
+			<if test="personnel != null and personnel != ''">
+				AND personnel  = #{personnel} 
+			</if>
+		</where>
+	</select>
+
+	<insert id="insert" parameterType="Dispatch">
+		INSERT INTO OA_DISPATCH
+		(ID,DISPATCHNUM,TYPE,REPAIRTIME,CARNUMBER,DEVICEID,SIM,OWNER,
+		TELEPHONE,CAUSES,PERSONNEL,PERSONNELPHONE,DISPATCHTIME,OPERATORID,OPERATORTIME,OUTCOME,contact,ptstate)
+		VALUES
+		(#{id},#{dispatchNum},#{type},#{repairTime},#{carNumber},#{deviceId},#{sim},#{owner},
+		#{telephone},#{causes},#{personnel},#{personnelPhone},#{dispatchTime},#{operatorId},#{operatorTime},#{outcome},#{contact},#{ptstate})
+	</insert>
+	<select id="queryOne" parameterType="hashmap" resultType="Dispatch">
+		SELECT <include refid="sql_base"></include> FROM OA_DISPATCH WHERE ID =#{id}
+	</select>
+	<delete id="delete" parameterType="string">
+		DELETE FROM OA_DISPATCH
+		WHERE ID =#{id}
+	</delete>
+</mapper>

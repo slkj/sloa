@@ -1,0 +1,128 @@
+package cn.slkj.sloa.controller.weixin;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import cn.slkj.hbsl.util.javaUtil.date.DateStyle;
+import cn.slkj.hbsl.util.javaUtil.date.DateUtil;
+import cn.slkj.sloa.entity.shfw.Weixin;
+import cn.slkj.sloa.service.WeixinService;
+import cn.slkj.sloa.util.easyuiUtil.EPager;
+import cn.slkj.sloa.util.easyuiUtil.JsonResult;
+
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.github.miemiedev.mybatis.paginator.domain.PageList;
+
+@Controller
+@RequestMapping("/weixin")
+public class WeixinController {
+
+	@Autowired
+	private WeixinService weixinService;
+
+	@RequestMapping("/order/toOrderPage")
+	public String toFeesPage() {
+		return "weixin/orders";
+	}
+
+	@RequestMapping("/order/toOrderAdd")
+	public String toOrderAdd() {
+		return "weixin/ordersAdd";
+	}
+
+	@RequestMapping("/order/toOrderEdit")
+	public String toOrderEdit() {
+		return "weixin/ordersEdit";
+	}
+
+	/**
+	 * 微信订单列表
+	 */
+	@RequestMapping("/list")
+	@ResponseBody
+	public EPager<Weixin> getAll(HttpServletRequest request) throws Exception {
+		Map<String, Object> pageMap = new HashMap<String, Object>();
+		int page = Integer.parseInt(request.getParameter("page"));
+		int rows = Integer.parseInt(request.getParameter("rows"));
+		pageMap.put("orderNumber", request.getParameter("orderNumber"));
+		pageMap.put("type", request.getParameter("type"));
+		pageMap.put("carNumber", request.getParameter("carNumber"));
+		pageMap.put("owner", request.getParameter("owner"));
+		pageMap.put("purpose", request.getParameter("purpose"));
+		pageMap.put("phone", request.getParameter("phone"));
+		pageMap.put("deadline", request.getParameter("deadline"));
+		pageMap.put("prove", request.getParameter("prove"));
+		pageMap.put("remark", request.getParameter("remark"));
+		pageMap.put("colAmounts", request.getParameter("colAmounts"));
+		pageMap.put("riqi", request.getParameter("riqi"));
+		System.out.println("---------"+request.getParameter("riqiStart"));
+		pageMap.put("riqiStart", request.getParameter("riqiStart"));
+		pageMap.put("riqiEnd", request.getParameter("riqiEnd"));
+		
+		pageMap.put("payee", request.getParameter("payee"));
+		pageMap.put("qr_time", request.getParameter("qr_time"));
+		pageMap.put("state", request.getParameter("state"));
+		pageMap.put("pay_time", request.getParameter("pay_time"));
+		PageBounds pageBounds = new PageBounds(page, rows);
+		List<Weixin> list = weixinService.getAll(pageMap, pageBounds);
+		PageList<Weixin> pageList = (PageList<Weixin>) list;
+		return new EPager<Weixin>(pageList.getPaginator().getTotalCount(), list);
+	}
+
+	@RequestMapping(value = "/update", method = { RequestMethod.POST })
+	@ResponseBody
+	public JsonResult update(int id, Integer state, Integer type,
+			String carNumber, String owner, String purpose, String phone,
+			String deadline, String prove, String remark, String colAmounts,
+			String riqi, String payee, String qr_time) {
+		int i = 0;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id); 
+		map.put("colAmounts", colAmounts); 
+
+		i += weixinService.update(map);
+		if (i > 0) {
+			return new JsonResult(true, "修改成功。");
+		} else {
+			return new JsonResult(false, "失败！");
+		}
+	}
+
+	/**
+	 * 交费审核
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/pay", method = {RequestMethod.POST})
+	public 
+	@ResponseBody JsonResult pay(int id, int state, String pay_time) {
+		try {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("id", id);
+			map.put("state", state); 
+			String entryTime = DateUtil.DateToString(new Date(),DateStyle.YYYY_MM_DD_HH_MM_SS);
+			map.put("pay_time", entryTime);
+			int i = 0;
+			i += weixinService.pay(map);
+			if (i > 0) {
+
+				return new JsonResult(true, "操作成功。");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new JsonResult(false, "系统异常，操作失败！");
+		}
+		return new JsonResult(false, "操作失败！");
+	}
+
+}

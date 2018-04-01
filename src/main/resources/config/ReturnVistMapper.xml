@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.slkj.sloa.mapper.ReturnVistMapper">
+	<sql id="sql_base">
+		id, carNumber, cartype, carman, carphone, carcompany,
+		fromphone, causes, calltime, callman, carstate,
+		advice,operatorId,operatorTime,department
+	</sql>
+	<select id="getAll" resultType="ReturnVist" parameterType="hashmap">
+		SELECT
+		<include refid="sql_base"></include>
+		FROM oa_return_vist
+		<where>
+
+			<if test="carNumber != null and carNumber != ''">AND CARNUMBER LIKE '%'+#{carNumber}+'%'  </if>
+			<if test="carcompany != null and carcompany != ''">AND carcompany LIKE '%'+#{carcompany}+'%'  </if>
+			<if test="calltime != null and calltime != ''">AND calltime >= #{calltime} </if>
+			<if test="calltime1 != null and calltime1 != ''"> AND calltime &lt;= #{calltime1} </if>
+			<if test="callman != null and callman != ''">AND callman LIKE '%'+#{callman}+'%'</if>
+		</where>
+	</select>
+
+	<insert id="insert" parameterType="ReturnVist">
+		INSERT INTO oa_return_vist
+		(id, carNumber, cartype, carman, carphone, carcompany,
+		fromphone,
+		causes, calltime, callman, carstate,
+		advice,operatorId,operatorTime,department)
+		VALUES
+		(#{id},#{carNumber},#{cartype},#{carman},#{carphone},#{carcompany},#{fromphone},#{causes},
+		#{calltime},#{callman},#{carstate},#{advice},#{operatorId},#{operatorTime},#{department})
+	</insert>
+	<delete id="delete" parameterType="string">
+		DELETE FROM oa_return_vist
+		WHERE ID =#{id}
+	</delete>
+</mapper>

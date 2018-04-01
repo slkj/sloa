@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.slkj.sloa.mapper.RepairMapper">
+	<sql id="sql_base">
+		id, carId, repairNum, guy, wxTime, contact, site, why, cost, operator,
+		operatorTime, department, outcome, looker, lookTime,
+		remark,isLook,carNumber,equitment,simNumber,equitment1,simNumber1,
+	   (SELECT REALNAME FROM OA_USER WHERE ID=guy)guyName,wxType
+	</sql>
+	<select id="queryOne" resultType="Repair" parameterType="hashmap">
+		SELECT
+		<include refid="sql_base" />
+		from OA_REPAIR
+		<where>
+			<if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+		</where>
+	</select>
+	<select id="getAll" resultType="Repair" parameterType="hashmap">
+		SELECT OA_REPAIR.*,OA_USER.REALNAME as guyName
+		FROM OA_REPAIR  LEFT JOIN OA_USER ON OA_USER.ID=OA_REPAIR.GUY
+		<where>
+			<if test="carId != null and carId != ''">AND carId=#{carId}</if>
+			<if test="carNumber != null and carNumber != ''">AND carNumber LIKE '%'+  #{carNumber}+'%'</if>
+			<if test="department != null and department != ''">AND DEPARTMENT IN (SELECT ID FROM F_GETC( #{department}))
+			</if>
+			<if test="guyName != null and guyName != ''"> AND OA_USER.REALNAME LIKE '%'+  #{guyName}+'%'</if>
+			<if test="wxTime != null and wxTime != ''">AND WXTIME >= #{wxTime} </if>
+			<if test="wxTime1 != null and wxTime1 != ''"> AND WXTIME &lt;= #{wxTime1} </if>
+			<if test="outcome != null and outcome != ''">AND outcome = #{outcome} </if>
+			<if test="isLook != null and isLook != ''">AND isLook = #{isLook} </if>
+		</where>
+	</select>
+	<insert id="save" parameterType="Repair">
+		INSERT INTO OA_REPAIR
+		(carId,carNumber, repairNum, guy, wxTime, contact, site, why, cost, operator,operatorTime, department,
+		outcome,remark,isLook,equitment,simNumber,equitment1,simNumber1,wxType)
+		VALUES
+		(#{carId},#{carNumber},#{repairNum},#{guy},#{wxTime},#{contact},#{site},#{why},#{cost},#{operator},
+		#{operatorTime},#{department},#{outcome},#{remark},'0',#{equitment},#{simNumber},#{equitment1},#{simNumber1},#{wxType})
+	</insert>
+	
+	<update id="edit" parameterType="Repair">
+		UPDATE OA_REPAIR SET carId=#{carId},carNumber=#{carNumber},<!--  repairNum=#{repairNum}, --> guy=#{guy},
+		wxTime=#{wxTime},contact=#{contact}, site=#{site}, why=#{why}, cost=#{cost}, outcome=#{outcome},remark=#{remark},
+		equitment=#{equitment},simNumber=#{simNumber},equitment1=#{equitment1},simNumber1=#{simNumber1},
+		wxType=#{wxType} WHERE ID =#{id}
+	</update>
+	<delete id="delete" parameterType="string">
+		DELETE FROM OA_REPAIR WHERE
+		ID = #{id}
+	</delete>
+	<update id="isLook" parameterType="hashmap">
+		UPDATE OA_REPAIR SET lookTime=#{lookTime}, looker
+		=#{looker},isLook=#{isLook} WHERE ID IN
+		<foreach collection="ids" item="id" index="index" open="("
+			separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+		<update id="isOutcome" parameterType="hashmap">
+		UPDATE OA_REPAIR SET operatorTime=#{operatorTime}, operator
+		=#{operator},outcome=#{outcome} WHERE ID IN
+		<foreach collection="ids" item="id" index="index" open="("
+			separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	
+	<insert id="saveByRNum" parameterType="Repair">
+		INSERT INTO OA_REPAIR
+		(carNumber, repairNum,  contact,equitment,simNumber,why,guy, cost,isLook,wxTime,equitment1,simNumber1,site,wxType)
+			SELECT carNumber, dispatchNum,  personnelPhone,deviceId,sim,causes,#{guy}, #{cost} ,'0',
+			#{wxTime},#{equitment1},#{simNumber1},#{site},#{wxType} FROM oa_dispatch WHERE dispatchNum = #{repairNum}
+	</insert>
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.slkj.sloa.mapper.LicenseMapper">
+	<sql id="sql_temp">
+		id, vId, licenseNo, licenseType, riqi, endTime, remark,
+		(SELECT CARNUMBER FROM OA_VEHICLE WHERE ID= VID) AS vehicleNumber		
+	</sql>
+	<select id="getList" resultType="License" parameterType="hashmap">		
+     SELECT OA_License.id,licenseNo, licenseType, riqi, OA_License.endTime, remark,OA_VEHICLE.CARNUMBER as vehicleNumber,
+    OA_VEHICLE.id as vId
+       FROM OA_License
+        RIGHT JOIN (
+		SELECT
+		vid,
+		MAX (endTime) AS endTime
+		FROM
+		OA_License
+		GROUP BY
+		OA_License.VID
+		)OA_LI ON OA_LI.VID = OA_License.VID
+			AND OA_LI.endTime = OA_License.endTime
+			  RIGHT JOIN OA_VEHICLE  on OA_VEHICLE.ID= OA_License.VID
+		<where>
+			<if test="carNumber != null and carNumber != ''">
+				AND OA_VEHICLE.CARNUMBER LIKE '%'+#{carNumber}+'%'
+			</if>
+			<if test="licenseNo != null and licenseNo != ''">
+				AND OA_License.licenseNo LIKE '%'+#{licenseNo}+'%'
+			</if>
+			<if test="licenseType != null and licenseType != ''">
+				AND OA_License.licenseType = #{licenseType}
+			</if>
+			 <if test="endDate1 != null and endDate1 != ''">
+					<![CDATA[ AND OA_License.endTime  >= #{endDate1}]]>
+            </if>
+            <if test="endDate2 != null and endDate2 != ''">
+					<![CDATA[ AND OA_License.endTime  <= #{endDate2} ]]>
+            </if>
+            <if test="depId != null and depId != ''">
+				AND OA_VEHICLE.depId IN (SELECT ID FROM F_GETC( #{depId}))
+			</if>   
+		</where>
+	</select>
+		<select id="getListByCarNumber" resultType="License" parameterType="hashmap">
+		SELECT
+		<include refid="sql_temp" />
+		FROM OA_License
+		<where>
+			<if test="vId != null  and vId != ''">
+				AND vId = #{vId}
+			</if>
+		</where>
+	</select>
+	<select id="queryOne" resultType="License" parameterType="string">
+		SELECT
+		<include refid="sql_temp" />
+		FROM OA_License WHERE id = #{id}
+	</select>
+
+	<insert id="save" parameterType="License">
+		INSERT INTO OA_License (id, vId, licenseNo, licenseType, riqi, endTime, remark)
+		VALUES(
+		#{id},#{vId},#{licenseNo},#{licenseType},#{riqi},#{endTime},#{remark})
+	</insert>
+
+	<update id="edit" parameterType="License">
+		UPDATE OA_License SET
+		licenseNo=#{licenseNo}, licenseType=#{
+		licenseType},riqi=#{riqi},endTime=#{endTime},
+		remark=#{remark} WHERE ID= #{id}
+	</update>
+
+	<delete id="delete" parameterType="string">
+		DELETE FROM OA_License WHERE ID
+		= #{id}
+	</delete>
+
+
+
+
+</mapper>

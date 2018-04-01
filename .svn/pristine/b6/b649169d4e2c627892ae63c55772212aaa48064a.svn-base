@@ -1,0 +1,222 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>客服来电管理</title>
+<%@ include file="/common/taglibs.jsp"%>
+<script type="text/javascript">
+	var grid;
+	$(function() {
+
+		loadJSPButton(56);
+
+		loadDataGrid();
+
+		$("#addBtn").click(function() {
+			openAddWin();
+		});
+
+		// 		$("#department").combotree({
+		// 			url : '../dep/getDepTree',
+		// 			lines : true
+		// 		});
+
+		$("#search_btn").click(function() {
+			$('#listGrid').datagrid({
+				queryParams : {
+					askName : $('#askName').val(),
+					number : $('#number').val(),
+					department : $("#department").val(),
+					callTime : $('#callTime').val(),
+					conversation : $('#conversation').val(),
+					answerName : $("#answerName").val(),
+					transferName : $('#transferName').val(),
+				}
+			});
+		});
+	});
+	/*加载数据*/
+	function loadDataGrid() {
+		grid = $('#listGrid')
+				.datagrid(
+						{
+							url : '../call/list',
+							fit : true,
+							nowrap : true, // false:折行
+							rownumbers : true, // 行号
+							striped : true, // 隔行变色
+							pagination : true,
+							pageSize : 20,
+							pageList : [ 10, 20, 30, 50, 100 ],
+							loadMsg : '数据加载中,请稍后……',
+							columns : [ [
+							// 										{
+							// 											field : 'ck',
+							// 											checkbox : true
+							// 										},
+							{
+								field : 'askName',
+								title : '来电者姓名'
+							}, {
+								field : 'number',
+								title : '来电号码',
+							}, {
+								field : 'department',
+								title : '来电所属公司',
+							}, {
+								field : 'callTime',
+								title : '来电时间',
+							}, {
+								field : 'conversation',
+								title : '通话内容概要'
+							}, {
+								field : 'answerName',
+								title : '接听者姓名'
+							}, {
+								field : 'transferName',
+								title : '转接员'
+							} ] ],
+							toolbar : '#td_toolbar',
+							onLoadSuccess : function(data) {
+								grid.datagrid('clearSelections');
+								if (data.total == 0) {
+									var body = $(this).data().datagrid.dc.body2;
+									body
+											.find('table tbody')
+											.append(
+													'<tr><td width="'
+															+ body.width()
+															+ '" style="height: 35px; text-align: center;"><h1>暂无数据</h1></td></tr>');
+								}
+							},
+						});
+		// 设置分页控件
+		grid.datagrid('getPager').pagination({
+			beforePageText : '第',// 页数文本框前显示的汉字
+			afterPageText : '页    共 {pages} 页',
+			displayMsg : '当前显示 {from} - {to} 条记录   共 {total} 条记录'
+		});
+	}
+
+	/*弹出添加信息窗口*/
+	function openAddWin() {
+		SL.showWindow({
+			title : '添加来电信息',
+			iconCls : 'icon-add',
+			width : 400,
+			height : 360,
+			url : '../call/toCallAdd',
+			onLoad : function() {
+				$("#department").combogrid({
+					delay : 2000,
+					required : true,
+					panelWidth : 300,
+					idField : 'compName',
+					textField : 'compName',
+					url : '../company/list',
+					loadMsg : '数据加载中,请稍后……',
+					onChange : function(newValue, oldValue) {
+						artChanged = true;//记录是否有改变（当手动输入时发生)
+					},
+					columns : [ [ {
+						field : 'compName',
+						title : '公司名称',
+						width : 50
+					} ] ],
+					fitColumns : true,
+					pagination : true,
+					pageSize : 20,
+					keyHandler : {
+						up : function() {
+						},
+						down : function() {
+						},
+						enter : function() {
+						},
+						query : function(q) {
+							//动态搜索
+							$(this).combogrid('grid').datagrid('reload', {
+								'companyName' : q
+							});
+							$(this).combogrid('setValue', q);
+						}
+					},
+					onSelect : function(index, row) {
+						selectRow = row;
+						$("#companyId").val(row.id);
+					}
+				});
+				// 				}
+			},
+			buttons : [
+					{
+						text : '确定',
+						iconCls : 'icon-add',
+						handler : function() {
+							if ($("#devPostForm").form('enableValidation')
+									.form('validate')) {
+								var data = $("#devPostForm").serialize();
+								$.ajax({
+									cache : false,
+									type : "POST",
+									url : '../call/addCall',
+									data : data,
+									async : false,
+									dataType : 'json',
+									success : function(data) {
+										if (data.success) {
+											SL.closeWindow();
+											grid.datagrid('reload');
+										} else {
+											alert("出错了");
+										}
+									}
+								});
+							}
+						}
+					}, {
+						text : '关闭',
+						handler : function() {
+							SL.closeWindow();
+						}
+					} ]
+		});
+	}
+</script>
+</head>
+<body class="easyui-layout">
+	<div region="north"
+		style="height: 80px; border-bottom: 1px #a7b1c2 dashed; padding: 5px;">
+		<form id="gridForm">
+			<div class="item">
+				<div id="cot">
+					<div class="shang">
+						来电者姓名：<input id="askName" style="width: 140px"
+							class="easyui-textbox" data-options="prompt:'---请填写来电者姓名---'" />
+						来电号码：<input id="number" style="width: 130px"
+							class="easyui-textbox" data-options="prompt:'---请填写来电号码---'" />
+						接听时间：<input id="lytime" class="Wdate" type="text"
+							onFocus="WdatePicker({isShowClear:false,readOnly:true})" /> - <input
+							id="lytime1" class="Wdate" type="text"
+							onFocus="WdatePicker({isShowClear:false,readOnly:true})" />
+					</div>
+					<div class="xia">
+						接听者： <input id="answerName" class="easyui-textbox"
+							style="width: 140px;" data-options="prompt:'---请填写接听者姓名---'" />
+						转接者： <input id="transferName" style="width: 140px"
+							class="easyui-textbox" data-options="prompt:'---请填写转接者姓名---'" />
+						<a id="search_btn" href="#" class="easyui-linkbutton"
+							data-options="iconCls:'icon-search'">查询</a>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div region="center">
+		<table id="listGrid"></table>
+	</div>
+	<div id="td_toolbar"></div>
+</body>
+</html>

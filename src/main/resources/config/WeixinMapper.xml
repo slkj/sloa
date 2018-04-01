@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.slkj.sloa.mapper.WeixinMapper">
+	<sql id="sql_temp">
+		id,state,type,carNumber,owner,purpose,phone,deadline,prove,remark,
+		colAmounts,riqi,payee,qr_time,orderNumber,pay_time ,price
+	</sql>
+	<select id="getAll" resultType="Weixin" parameterType="hashmap">
+		SELECT
+		id,state,type,carNumber,owner,purpose,phone,deadline,prove,remark,
+		colAmounts,riqi,payee,qr_time,orderNumber,pay_time,openId,wx_type,price
+		FROM oa_weixin
+		<where>
+			<if test="state != null and state != ''">AND state=#{state}</if>
+			<if test="wx_type != null and wx_type != ''">AND wx_type LIKE '%'+#{wx_type}+'%'</if>
+			<if test="carNumber != null and carNumber != ''">AND carNumber LIKE '%'+#{carNumber}+'%'</if>
+			<if test="orderNumber != null and orderNumber != ''">AND orderNumber LIKE '%'+#{orderNumber}+'%'</if>
+			<if test="pay_time != null and pay_time != ''">AND pay_time >= #{riqiStart} </if>
+			<if test="pay_time != null and pay_time != ''">AND pay_time >= #{riqiStart} </if>
+		</where>
+	</select>
+
+	<insert id="add" parameterType="hashmap">
+		INSERT INTO oa_weixin
+		(orderNumber,state,type,carNumber,owner,purpose,phone,deadline,prove,remark,riqi,wx_type,openId,price)
+		VALUES
+		(#{orderNumber},#{state},#{type},#{carNumber},#{owner},#{purpose},#{phone},#{deadline},#{prove},#{remark},
+		#{riqi},#{wx_type},#{openId},#{price})
+	</insert>
+
+	<update id="update" parameterType="Weixin">
+		UPDATE oa_weixin
+		<set>
+			<if test="colAmounts != null and colAmounts != ''"> colAmounts = #{colAmounts}</if>
+			<if test="price != null and price != ''"> price= #{price},</if>
+			<if test="state != null and state != ''"> state = #{state},</if>
+		</set>
+		WHERE orderNumber = #{orderNumber}
+	</update>
+
+	<update id="pay" parameterType="Weixin">
+		UPDATE oa_weixin SET
+		state = #{state},
+		tradeNo = #{tradeNo},
+		pay_time = #{pay_time}
+		WHERE orderNumber = #{orderNumber}
+	</update>
+</mapper>

@@ -1,0 +1,25 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>交费审核</title>
+<%@ include file="/common/taglibs.jsp"%>
+</head>
+<body>
+<form id="payForm" metdod="post" action="">
+		<input id="id" name="id" type="hidden"  />
+		<table id="listGrid" style="width: 100%; padding: 10px">
+			<br/><tr>
+				<td style="width:25%">支付状态 ：</td>
+				<td><select id="state" name="state" class="easyui-combobox"
+					style="width: 70%" editable="false" >
+					<option value="0">待处理</option>
+					<option value="1">已支付</option>
+					</select></td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

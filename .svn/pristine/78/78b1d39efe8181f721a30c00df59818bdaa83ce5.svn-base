@@ -1,0 +1,251 @@
+package cn.slkj.sloa.controller.weixin;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.github.miemiedev.mybatis.paginator.domain.PageList;
+
+import cn.slkj.hbsl.util.javaUtil.date.DateStyle;
+import cn.slkj.hbsl.util.javaUtil.date.DateUtil;
+import cn.slkj.sloa.entity.shfw.Fees;
+import cn.slkj.sloa.entity.shfw.Weixin;
+import cn.slkj.sloa.service.FeesService;
+import cn.slkj.sloa.service.WeixinService;
+import cn.slkj.sloa.util.easyuiUtil.EPager;
+import cn.slkj.sloa.util.easyuiUtil.JsonResult;
+import net.sf.json.JSONObject;
+
+@Controller
+@RequestMapping("/weixin")
+public class WeixinController {
+
+	@Autowired
+	private WeixinService weixinService;
+	@Autowired
+	private FeesService feesService;
+	@RequestMapping("/order/toOrderPage")
+	public String toFeesPage() {
+		return "weixin/orders";
+	}
+
+	@RequestMapping("/order/toOrderAdd")
+	public String toOrderAdd() {
+		return "weixin/ordersAdd";
+	}
+
+	@RequestMapping("/order/toOrderEdit")
+	public String toOrderEdit() {
+		return "weixin/ordersEdit";
+	}
+
+	/**
+	 * 微信订单列表
+	 */
+	@RequestMapping("/list")
+	@ResponseBody
+	public EPager<Weixin> getAll(HttpServletRequest request,HttpServletResponse response) throws Exception {
+		
+          
+		Map<String, Object> pageMap = new HashMap<String, Object>();
+		int page = Integer.parseInt(request.getParameter("page"));
+		int rows = Integer.parseInt(request.getParameter("rows"));
+		pageMap.put("orderNumber", request.getParameter("orderNumber"));
+		pageMap.put("type", request.getParameter("type"));
+		pageMap.put("carNumber", request.getParameter("carNumber"));
+		pageMap.put("owner", request.getParameter("owner"));
+		pageMap.put("purpose", request.getParameter("purpose"));
+		pageMap.put("phone", request.getParameter("phone"));
+		pageMap.put("deadline", request.getParameter("deadline"));
+		pageMap.put("prove", request.getParameter("prove"));
+		pageMap.put("remark", request.getParameter("remark"));
+		pageMap.put("colAmounts", request.getParameter("colAmounts"));
+		pageMap.put("riqi", request.getParameter("riqi"));
+ 		pageMap.put("riqiStart", request.getParameter("riqiStart"));
+		pageMap.put("riqiEnd", request.getParameter("riqiEnd"));
+		pageMap.put("payee", request.getParameter("payee"));
+		pageMap.put("qr_time", request.getParameter("qr_time"));
+		pageMap.put("state", request.getParameter("state"));
+		pageMap.put("pay_time", request.getParameter("pay_time"));
+		PageBounds pageBounds = new PageBounds(page, rows);
+		List<Weixin> list = weixinService.getAll(pageMap, pageBounds);
+		PageList<Weixin> pageList = (PageList<Weixin>) list;
+		return new EPager<Weixin>(pageList.getPaginator().getTotalCount(), list);
+	}
+	
+	public static void main(String[] args) {
+		try {
+			
+			String result = httpPostWithJSON("http://221.193.212.117/sloa/weixin/getList");
+	        System.out.println(result);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 		
+	}
+	
+	public static String httpPostWithJSON(String url) throws Exception {
+
+        HttpPost httpPost = new HttpPost(url);
+        CloseableHttpClient client = HttpClients.createDefault();
+        String respContent = null;
+        //json方式
+        JSONObject jsonParam = new JSONObject();  
+        jsonParam.put("page", "1");
+        jsonParam.put("carNumber", "冀D5230S");
+        jsonParam.put("rows", "10");
+        StringEntity entity = new StringEntity(jsonParam.toString(),"utf-8");//解决中文乱码问题    
+        entity.setContentEncoding("UTF-8");    
+        entity.setContentType("application/json");    
+        httpPost.setEntity(entity);
+        System.out.println();
+        
+        HttpResponse resp = client.execute(httpPost);
+        if(resp.getStatusLine().getStatusCode() == 200) {
+            HttpEntity he = resp.getEntity();
+            respContent = EntityUtils.toString(he,"UTF-8");
+        }
+        return respContent;
+    }
+	/**
+	 * 根据车牌号查询订单列表
+	 */
+	@RequestMapping("/getList")
+	@ResponseBody
+	public EPager<Weixin> getList(String carNumber,@RequestParam(required = false, defaultValue = "1") Integer page, // 第几页
+			@RequestParam(required = false, defaultValue = "10") Integer rows) throws Exception {
+		Map<String, Object> pageMap = new HashMap<String, Object>();
+		pageMap.put("carNumber", carNumber);
+		PageBounds pageBounds = new PageBounds(page, rows);
+		List<Weixin> list = weixinService.getAll(pageMap, pageBounds);
+		PageList<Weixin> pageList = (PageList<Weixin>) list;
+		return new EPager<Weixin>(pageList.getPaginator().getTotalCount(), list);
+	}
+	/**
+	 * 查询车辆缴费记录
+	 * @param carNumber
+	 * @param page
+	 * @param rows
+	 * @return
+	 */
+	
+	@RequestMapping(value = "/getCarFees")
+	public @ResponseBody Fees getCarFees(HttpServletRequest request,HttpServletResponse response) {
+//		String carNumber,String endTime,String phone
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("carNumber", request.getParameter("carNumber"));
+		map.put("endTime", request.getParameter("endTime"));
+		map.put("phone", request.getParameter("phone"));
+		return feesService.getCarFeesByWx(map);
+	}
+	/**
+	 * 上传订单
+	 * @param id
+	 * @param state
+	 * @param type
+	 * @param carNumber
+	 * @param owner
+	 * @param purpose
+	 * @param phone
+	 * @param deadline
+	 * @param prove
+	 * @param remark
+	 * @param riqi
+	 * @param orderNumber
+	 * @return
+	 */
+	@RequestMapping(value = "/uporder")
+	@ResponseBody
+	public JsonResult uporder(int id, Integer state, Integer type,
+			String carNumber, String owner, String purpose, String phone,
+			String deadline, String prove, String remark,
+			String riqi, String orderNumber, String openId, String wx_type) {
+		int i = 0;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("state", state); 
+		map.put("type", type); 
+		map.put("carNumber", carNumber); 
+		map.put("owner", owner); 
+		map.put("purpose", purpose); 
+		map.put("phone", phone); 
+		map.put("deadline", deadline); 
+		map.put("prove", prove); 
+		map.put("remark", remark); 
+		map.put("riqi", riqi); 
+		map.put("openId", openId); 
+		map.put("wx_type", wx_type); 
+		map.put("orderNumber", orderNumber); 
+		i = weixinService.add(map);
+		if (i > 0) {
+			return new JsonResult(true, "操作成功。");
+		} else {
+			return new JsonResult(false, "失败！");
+		}
+	}
+	
+	@RequestMapping(value = "/update")
+	@ResponseBody
+	public JsonResult update(int id, Integer state, Integer type,
+			String carNumber, String owner, String purpose, String phone,
+			String deadline, String prove, String remark, String colAmounts,
+			String riqi, String payee, String qr_time) {
+		int i = 0;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id); 
+		map.put("colAmounts", colAmounts); 
+
+		i = weixinService.update(map);
+		if (i > 0) {
+			return new JsonResult(true, "修改成功。");
+		} else {
+			return new JsonResult(false, "失败！");
+		}
+	}
+
+	/**
+	 * 交费审核
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/pay")
+	public 
+	@ResponseBody JsonResult pay(int id, int state, String pay_time) {
+		try {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("id", id);
+			map.put("state", state); 
+			String entryTime = DateUtil.DateToString(new Date(),DateStyle.YYYY_MM_DD_HH_MM_SS);
+			map.put("pay_time", entryTime);
+			int i = 0;
+			i += weixinService.pay(map);
+			if (i > 0) {
+
+				return new JsonResult(true, "操作成功。");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new JsonResult(false, "系统异常，操作失败！");
+		}
+		return new JsonResult(false, "操作失败！");
+	}
+
+}

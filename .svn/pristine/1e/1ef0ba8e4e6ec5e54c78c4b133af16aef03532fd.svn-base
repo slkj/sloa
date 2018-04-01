@@ -1,0 +1,171 @@
+package cn.slkj.sloa.entity;
+
+public class Orders {
+
+	private String id;
+	private String orderNumber;
+	private String carNumber;
+	private String purpose;
+	private String deviceNumber;
+	private int devicePice;
+	private String proveNumber;
+	private int provePice;
+	private String simNumber;
+	private int simPice;
+	private String cardNumber;
+	private int cardPice;
+	private String cardNumber1;
+	private int cardPice1;
+	private String fees;
+	private int feesPice;
+	private String agent;
+	private String riqi;
+	private String depCode;
+	private String startTime;// 服务开始时间
+	private String endTime;// 服务结束时间
+	private int state;
+	private int paystate;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+	public String getCarNumber() {
+		return carNumber;
+	}
+	public void setCarNumber(String carNumber) {
+		this.carNumber = carNumber;
+	}
+	public String getPurpose() {
+		return purpose;
+	}
+	public void setPurpose(String purpose) {
+		this.purpose = purpose;
+	}
+	public String getDeviceNumber() {
+		return deviceNumber;
+	}
+	public void setDeviceNumber(String deviceNumber) {
+		this.deviceNumber = deviceNumber;
+	}
+	public int getDevicePice() {
+		return devicePice;
+	}
+	public void setDevicePice(int devicePice) {
+		this.devicePice = devicePice;
+	}
+	public String getProveNumber() {
+		return proveNumber;
+	}
+	public void setProveNumber(String proveNumber) {
+		this.proveNumber = proveNumber;
+	}
+	public int getProvePice() {
+		return provePice;
+	}
+	public void setProvePice(int provePice) {
+		this.provePice = provePice;
+	}
+	public String getSimNumber() {
+		return simNumber;
+	}
+	public void setSimNumber(String simNumber) {
+		this.simNumber = simNumber;
+	}
+	public int getSimPice() {
+		return simPice;
+	}
+	public void setSimPice(int simPice) {
+		this.simPice = simPice;
+	}
+	public String getCardNumber() {
+		return cardNumber;
+	}
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber = cardNumber;
+	}
+	public int getCardPice() {
+		return cardPice;
+	}
+	public void setCardPice(int cardPice) {
+		this.cardPice = cardPice;
+	}
+	public String getCardNumber1() {
+		return cardNumber1;
+	}
+	public void setCardNumber1(String cardNumber1) {
+		this.cardNumber1 = cardNumber1;
+	}
+	public int getCardPice1() {
+		return cardPice1;
+	}
+	public void setCardPice1(int cardPice1) {
+		this.cardPice1 = cardPice1;
+	}
+	public String getFees() {
+		return fees;
+	}
+	public void setFees(String fees) {
+		this.fees = fees;
+	}
+	public int getFeesPice() {
+		return feesPice;
+	}
+	public void setFeesPice(int feesPice) {
+		this.feesPice = feesPice;
+	}
+	public String getAgent() {
+		return agent;
+	}
+	public void setAgent(String agent) {
+		this.agent = agent;
+	}
+	public String getRiqi() {
+		return riqi;
+	}
+	public void setRiqi(String riqi) {
+		this.riqi = riqi;
+	}
+	public String getDepCode() {
+		return depCode;
+	}
+	public void setDepCode(String depCode) {
+		this.depCode = depCode;
+	}
+	public String getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+	public String getEndTime() {
+		return endTime;
+	}
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+	public int getState() {
+		return state;
+	}
+	public void setState(int state) {
+		this.state = state;
+	}
+	public int getPaystate() {
+		return paystate;
+	}
+	public void setPaystate(int paystate) {
+		this.paystate = paystate;
+	}
+	@Override
+	public String toString() {
+		return "Orders [id=" + id + ", orderNumber=" + orderNumber + ", carNumber=" + carNumber + ", purpose=" + purpose + ", deviceNumber=" + deviceNumber + ", devicePice=" + devicePice + ", proveNumber=" + proveNumber + ", provePice=" + provePice + ", simNumber=" + simNumber + ", simPice=" + simPice + ", cardNumber=" + cardNumber + ", cardPice=" + cardPice + ", cardNumber1=" + cardNumber1 + ", cardPice1=" + cardPice1 + ", fees=" + fees + ", feesPice=" + feesPice + ", agent=" + agent + ", riqi=" + riqi + ", depCode=" + depCode + ", startTime=" + startTime + ", endTime=" + endTime + ", state=" + state + ", paystate=" + paystate + "]";
+	}
+
+}

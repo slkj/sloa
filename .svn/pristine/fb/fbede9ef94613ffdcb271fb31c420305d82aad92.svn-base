@@ -1,0 +1,15 @@
+package cn.slkj.sloa.service;
+
+import java.util.HashMap;
+import java.util.List;
+
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+
+import cn.slkj.hbsl.util.PageData;
+import cn.slkj.sloa.entity.system.Company;
+import cn.slkj.sloa.entity.system.User;
+import cn.slkj.sloa.entity.vehicle.Vehicle;
+
+public interface CompanyService {
+	public List<Company> queryComList(HashMap<String, Object> hashMap, PageBounds pageBounds);
+}

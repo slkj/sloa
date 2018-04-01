@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.slkj.sloa.mapper.ModuleMapper">
+	<sql id="sql_base">
+		ID,P_ID,NAME,URL,ICON,PRIORITY,DESCRIPTION,SORT
+	</sql>
+	<select id="getAll" resultType="Module" parameterType="hashmap">
+		SELECT
+		<include refid="sql_base"></include>
+		FROM OA_MODULE
+		<where>
+			<if test="pid != null and pid != ''">
+				AND P_ID = #{pid}
+			</if>
+			<if test="priority != null  and priority != ''">
+				AND PRIORITY &lt; #{priority}
+			</if>
+		</where>
+		ORDER BY SORT
+	</select>
+
+	<select id="queryOne" resultType="Module" parameterType="string">
+		SELECT *
+		FROM OA_MODULE WHERE ID =#{id}
+	</select>
+
+	<insert id="insert" parameterType="Module">
+		INSERT INTO OA_MODULE
+		(NAME,PRIORITY,URL,P_ID,ICON,DESCRIPTION,SORT)
+		VALUES(#{name},#{priority},#{url},#{p_id},#{icon},#{description},#{sort})
+	</insert>
+
+	<update id="update" parameterType="Module">
+		UPDATE OA_MODULE SET
+		NAME=#{name},PRIORITY=#{priority},URL=#{url},
+		P_ID=#{p_id},ICON=#{icon},
+		DESCRIPTION=#{description},sort=#{sort}
+		WHERE ID =#{id}
+	</update>
+
+	<delete id="delete" parameterType="string">
+		DELETE FROM OA_MODULE WHERE ID
+		= #{id}
+	</delete>
+
+	<select id="getModuleByUserId" parameterType="hashmap"
+		resultType="Module">
+		SELECT DISTINCT TBM.* FROM OA_MODULE TBM ,OA_ROLE_RES TBRR WHERE
+		TBM.ID = TBRR.MODULE_ID AND TBM.PRIORITY &lt; 3
+		<if test="userid != null and userid != ''">
+			AND TBRR.ROLE_ID = (SELECT roleId FROM OA_USER WHERE 1 = 1 AND
+			ID = #{userid} )
+		</if>
+		ORDER BY SORT
+	</select>
+
+	<select id="getModuleByRoleId" parameterType="hashmap"
+		resultType="Module">
+		SELECT DISTINCT TBR.* FROM OA_MODULE TBR ,OA_ROLE_RES TBRR
+		WHERE TBR.ID
+		= TBRR.MODULE_ID
+		<if test="roleid != null and roleid != ''">
+			AND TBRR.ROLE_ID = #{roleid}
+		</if>
+		AND ID != '1'
+	</select>
+
+	<insert id="saveUserRes" parameterType="hashmap">
+		INSERT INTO OA_USER_MODULE(userid,resid)
+		VALUES
+		<foreach collection="ids" item="item" index="index" separator=",">
+			(#{userid}, #{item} )
+		</foreach>
+	</insert>
+
+	<select id="getRolePer" parameterType="hashmap" resultType="Module">
+		SELECT DISTINCT TBR.* FROM OA_MODULE TBR ,OA_ROLE_RES TBRR
+		WHERE TBR.ID = TBRR.MODULE_ID AND ID != '1' AND PRIORITY IN ('3' ,'4')
+		<if test="roleid != null and roleid != ''">
+			AND TBRR.ROLE_ID = #{roleid}
+		</if>
+		<if test="modlueid != null and modlueid != ''">
+			AND TBR.P_ID= #{modlueid}
+		</if>
+		ORDER BY sort
+	</select>
+</mapper>

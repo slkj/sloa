@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.slkj.sloa.mapper.DriverMapper">
+	<sql id="sql_temp">
+		id, carNumber, deviceNum, driverNo, driverName, drivingNo, madeTime,
+		Collar, companyId, remark
+		<!-- (SELECT COMPNAME FROM OA_COMPANY WHERE ID=COMPANYID) AS COMPANYNAME -->
+	</sql>
+	<select id="getAll" resultType="Driver" parameterType="hashmap">
+		SELECT
+		<include refid="sql_temp" />
+		FROM OA_DRIVER
+		<where>
+			<if test="carNumber != null and carNumber != ''">
+				AND carNumber LIKE '%'+#{carNumber}+'%'
+			</if>
+			<if test="driverName != null and driverName != ''">
+				AND driverName LIKE '%'+#{driverName}+'%'
+			</if>
+			<if test="drivingNo != null and drivingNo != ''">
+				AND drivingNo LIKE '%'+#{drivingNo}+'%'
+			</if>
+		</where>
+	</select>
+	<select id="queryOne" resultType="Driver" parameterType="string">
+		SELECT
+		<include refid="sql_temp" />
+		FROM OA_DRIVER WHERE id = #{id}
+	</select>
+
+	<insert id="save" parameterType="Driver">
+		INSERT INTO OA_DRIVER (id,
+		carNumber, deviceNum, driverNo, driverName, drivingNo, madeTime,
+		collar, companyId, remark)
+		VALUES(
+		#{id},#{carNumber},#{deviceNum},#{driverNo},#{driverName},#{drivingNo},#{madeTime},#{collar},#{companyId},#{remark})
+	</insert>
+
+	<update id="edit" parameterType="Driver">
+		UPDATE OA_DRIVER SET
+		carNumber=#{ carNumber}, deviceNum=#{
+		deviceNum},driverNo=#{driverNo},driverName=#{driverName},
+		drivingNo=#{drivingNo},madeTime=#{madeTime},collar=#{collar},
+		companyId=#{ companyId},remark=#{remark}
+		WHERE ID= #{id}
+	</update>
+
+	<delete id="delete" parameterType="string">
+		DELETE FROM OA_DRIVER WHERE ID
+		= #{id}
+	</delete>
+
+
+
+
+</mapper>

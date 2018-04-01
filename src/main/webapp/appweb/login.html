@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>正在登录。。。。</title>
+<script type="text/javascript" src="http://g.alicdn.com/dingding/open-develop/1.5.1/dingtalk.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript">
+	var _config = {
+			agentid : '7935645',
+			corpId : 'ding7265dba91f03ed02'
+	};
+	dd.ready(function() {
+		//获取免登授权码 -- 注销获取免登服务，可以测试jsapi的一些方法             
+		dd.runtime.permission.requestAuthCode({
+			corpId : _config.corpId,
+			onSuccess : function(result) {
+				loginAjax(result.code);
+			},
+			onFail : function(err) {
+			}
+		});
+	});
+
+	//用户登录
+	function loginAjax(code) {
+		$.ajax({
+			url : "../goDingLogin?code="+code,
+			type : "get",
+			success : function(data) {
+// 				alert(data.msg);
+// 				if (data.success) {
+					
+					window.location.href = "index.jsp";
+// 				} else {
+// 					alert("暂无权限，请联系管理员。");
+// 				}
+			}
+		});
+	}
+</script>
+</head>
+<body>
+
+</body>
+</html>

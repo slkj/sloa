@@ -1,0 +1,14 @@
+package cn.slkj.sloa.mapper;
+
+import java.util.HashMap;
+import java.util.List;
+
+import cn.slkj.sloa.entity.system.Company;
+
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+
+public interface CompanyMapper {
+
+	public List<Company> queryComList(HashMap<String, Object> hashMap, PageBounds pageBounds);
+
+}

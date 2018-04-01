@@ -1,0 +1,588 @@
+[
+  {
+    "id": "2",
+    "name": "车辆管理",
+    "url": null,
+    "p_id": "1",
+    "priority": 1,
+    "icon": "icon-shezhi",
+    "description": null,
+    "sort": 1,
+    "state": null,
+    "children": [
+      {
+        "id": "8",
+        "name": "车辆档案",
+        "url": null,
+        "p_id": "2",
+        "priority": 1,
+        "icon": null,
+        "description": null,
+        "sort": 2,
+        "state": null,
+        "children": [
+          {
+            "id": "21",
+            "name": "车辆登记",
+            "url": "user/userPage",
+            "p_id": "8",
+            "priority": 1,
+            "icon": null,
+            "description": null,
+            "sort": 0,
+            "state": null,
+            "children": null
+          },
+          {
+            "id": "22",
+            "name": "挂车登记",
+            "url": "dep/departmentPage",
+            "p_id": "8",
+            "priority": 1,
+            "icon": null,
+            "description": null,
+            "sort": 0,
+            "state": null,
+            "children": null
+          },
+          {
+            "id": "23",
+            "name": "车辆查询",
+            "url": "role/rolePage",
+            "p_id": "8",
+            "priority": 1,
+            "icon": null,
+            "description": null,
+            "sort": 0,
+            "state": null,
+            "children": null
+          }
+        ]
+      }, {
+        "id": "8",
+        "name": "车辆业务",
+        "url": null,
+        "p_id": "2",
+        "priority": 1,
+        "icon": null,
+        "description": null,
+        "sort": 2,
+        "state": null,
+        "children": [
+          {
+            "id": "21",
+            "name": "保险管理",
+            "url": "user/userPage",
+            "p_id": "8",
+            "priority": 1,
+            "icon": null,
+            "description": null,
+            "sort": 0,
+            "state": null,
+            "children": null
+          },
+          {
+            "id": "22",
+            "name": "证件管理",
+            "url": "dep/departmentPage",
+            "p_id": "8",
+            "priority": 1,
+            "icon": null,
+            "description": null,
+            "sort": 0,
+            "state": null,
+            "children": null
+          },
+          {
+            "id": "23",
+            "name": "季审管理",
+            "url": "role/rolePage",
+            "p_id": "8",
+            "priority": 1,
+            "icon": null,
+            "description": null,
+            "sort": 0,
+            "state": null,
+            "children": null
+          },
+          {
+            "id": "24",
+            "name": "年审管理",
+            "url": "module/menusPage",
+            "p_id": "8",
+            "priority": 1,
+            "icon": null,
+            "description": null,
+            "sort": 0,
+            "state": null,
+            "children": null
+          },{
+            "id": "24",
+            "name": "异动管理",
+            "url": "module/menusPage",
+            "p_id": "8",
+            "priority": 1,
+            "icon": null,
+            "description": null,
+            "sort": 0,
+            "state": null,
+            "children": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "name": "售后服务",
+    "url": null,
+    "p_id": "1",
+    "priority": 1,
+    "icon": "icon-tip",
+    "description": null,
+    "sort": 2,
+    "state": null,
+    "children": [
+      {
+        "id": "10",
+        "name": "服务费登记",
+        "url": "driver/toDriverPage",
+        "p_id": "3",
+        "priority": 1,
+        "icon": null,
+        "description": null,
+        "sort": 1,
+        "state": null,
+        "children": null
+      },
+      {
+        "id": "10",
+        "name": "服务费查询",
+        "url": "driver/toDriverPage",
+        "p_id": "3",
+        "priority": 1,
+        "icon": null,
+        "description": null,
+        "sort": 1,
+        "state": null,
+        "children": null
+      },
+      {
+        "id": "11",
+        "name": "工单管理",
+        "url": null,
+        "p_id": "3",
+        "priority": 1,
+        "icon": null,
+        "description": null,
+        "sort": 2,
+        "state": null,
+        "children": [
+          {
+            "id": "28",
+            "name": "派工登记",
+            "url": "fees/toFeesPage",
+            "p_id": "11",
+            "priority": 1,
+            "icon": null,
+            "description": null,
+            "sort": 1,
+            "state": null,
+            "children": null
+          },
+          {
+            "id": "29",
+            "name": "派工查询",
+            "url": "fees/toFeesSHPage",
+            "p_id": "11",
+            "priority": 1,
+            "icon": null,
+            "description": null,
+            "sort": 2,
+            "state": null,
+            "children": null
+          },  {
+            "id": "29",
+            "name": "维修审核",
+            "url": "fees/toFeesSHPage",
+            "p_id": "11",
+            "priority": 1,
+            "icon": null,
+            "description": null,
+            "sort": 2,
+            "state": null,
+            "children": null
+          },  {
+            "id": "29",
+            "name": "报修查询",
+            "url": "fees/toFeesSHPage",
+            "p_id": "11",
+            "priority": 1,
+            "icon": null,
+            "description": null,
+            "sort": 2,
+            "state": null,
+            "children": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "4",
+    "name": "仓储管理",
+    "url": null,
+    "p_id": "1",
+    "priority": 1,
+    "icon": "icon-dingdan",
+    "description": null,
+    "sort": 3,
+    "state": null,
+    "children": [
+      {
+        "id": "12",
+        "name": "设备管理",
+        "url": null,
+        "p_id": "4",
+        "priority": 1,
+        "icon": null,
+        "description": null,
+        "sort": 1,
+        "state": null,
+        "children": [
+          {
+            "id": "30",
+            "name": "设备管理",
+            "url": "devices/toDevicesPage",
+            "p_id": "12",
+            "priority": 1,
+            "icon": null,
+            "description": "",
+            "sort": 1,
+            "state": null,
+            "children": null
+          },
+          {
+            "id": "31",
+            "name": "设备出库记录",
+            "url": "devices/toRecord",
+            "p_id": "12",
+            "priority": 1,
+            "icon": null,
+            "description": null,
+            "sort": 2,
+            "state": null,
+            "children": null
+          },
+          {
+            "id": "32",
+            "name": "维修记录",
+            "url": null,
+            "p_id": "12",
+            "priority": 1,
+            "icon": null,
+            "description": null,
+            "sort": 3,
+            "state": null,
+            "children": null
+          },
+          {
+            "id": "33",
+            "name": "返厂记录",
+            "url": null,
+            "p_id": "12",
+            "priority": 1,
+            "icon": null,
+            "description": null,
+            "sort": 4,
+            "state": null,
+            "children": null
+          },
+          {
+            "id": "34",
+            "name": "设备安检",
+            "url": "devices/toDeviceTest",
+            "p_id": "12",
+            "priority": 1,
+            "icon": null,
+            "description": null,
+            "sort": 5,
+            "state": null,
+            "children": null
+          }
+        ]
+      },
+      {
+        "id": "13",
+        "name": "证明管理",
+        "url": null,
+        "p_id": "4",
+        "priority": 1,
+        "icon": null,
+        "description": null,
+        "sort": 2,
+        "state": null,
+        "children": [
+          {
+            "id": "35",
+            "name": "证明管理",
+            "url": "prove/toProvePage",
+            "p_id": "13",
+            "priority": 1,
+            "icon": null,
+            "description": "",
+            "sort": 1,
+            "state": null,
+            "children": null
+          },
+          {
+            "id": "36",
+            "name": "证明出库记录",
+            "url": "prove/toRecord",
+            "p_id": "13",
+            "priority": 1,
+            "icon": null,
+            "description": null,
+            "sort": 2,
+            "state": null,
+            "children": null
+          }
+        ]
+      },
+      {
+        "id": "14",
+        "name": "SIM卡管理",
+        "url": null,
+        "p_id": "4",
+        "priority": 1,
+        "icon": null,
+        "description": null,
+        "sort": 3,
+        "state": null,
+        "children": [
+          {
+            "id": "38",
+            "name": "SIM卡管理",
+            "url": "sim/toSimPage",
+            "p_id": "14",
+            "priority": 1,
+            "icon": null,
+            "description": "",
+            "sort": 1,
+            "state": null,
+            "children": null
+          },
+          {
+            "id": "39",
+            "name": "回收记录",
+            "url": "",
+            "p_id": "14",
+            "priority": 1,
+            "icon": null,
+            "description": null,
+            "sort": 2,
+            "state": null,
+            "children": null
+          },
+          {
+            "id": "22d24266424b40b592d014c1fde37532",
+            "name": "缴费记录",
+            "url": "",
+            "p_id": "14",
+            "priority": 1,
+            "icon": null,
+            "description": "",
+            "sort": 3,
+            "state": null,
+            "children": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "5",
+    "name": "代理商管理",
+    "url": "",
+    "p_id": "1",
+    "priority": 1,
+    "icon": "icon-guanli",
+    "description": "",
+    "sort": 4,
+    "state": null,
+    "children": [
+      {
+        "id": "333",
+        "name": "服务费登记",
+        "url": "",
+        "p_id": "5",
+        "priority": 1,
+        "icon": null,
+        "description": "",
+        "sort": 0,
+        "state": null,
+        "children": [
+          {
+            "id": "333",
+            "name": "添加车辆",
+            "url": "vehicle/toAddPage",
+            "p_id": "33",
+            "priority": 2,
+            "icon": null,
+            "description": "",
+            "sort": 1,
+            "state": null,
+            "children": null
+          },
+          {
+            "id": "33",
+            "name": "查询车辆",
+            "url": "vehicle/toVehiclePage",
+            "p_id": "33",
+            "priority": 2,
+            "icon": null,
+            "description": "",
+            "sort": 2,
+            "state": null,
+            "children": null
+          }
+        ]
+      },
+      {
+        "id": "15",
+        "name": "车辆转网",
+        "url": "",
+        "p_id": "5",
+        "priority": 1,
+        "icon": null,
+        "description": "",
+        "sort": 2,
+        "state": null,
+        "children": [
+          {
+            "id": "16",
+            "name": "转网登记",
+            "url": "",
+            "p_id": "15",
+            "priority": 1,
+            "icon": null,
+            "description": "",
+            "sort": 1,
+            "state": null,
+            "children": null
+          },
+          {
+            "id": "40",
+            "name": "转入记录",
+            "url": "",
+            "p_id": "15",
+            "priority": 1,
+            "icon": null,
+            "description": "",
+            "sort": 2,
+            "state": null,
+            "children": null
+          },
+          {
+            "id": "41",
+            "name": "转出记录",
+            "url": "",
+            "p_id": "15",
+            "priority": 1,
+            "icon": null,
+            "description": "",
+            "sort": 3,
+            "state": null,
+            "children": null
+          }
+        ]
+      },
+      {
+        "id": "17",
+        "name": "车辆回访",
+        "url": "returnVist/toReturnVistPage",
+        "p_id": "5",
+        "priority": 1,
+        "icon": null,
+        "description": "",
+        "sort": 3,
+        "state": null,
+        "children": null
+      },
+      {
+        "id": "18",
+        "name": "维修记录",
+        "url": "",
+        "p_id": "5",
+        "priority": 1,
+        "icon": null,
+        "description": "",
+        "sort": 4,
+        "state": null,
+        "children": null
+      }
+    ]
+  },
+  {
+    "id": "6",
+    "name": "客户管理",
+    "url": null,
+    "p_id": "1",
+    "priority": 1,
+    "icon": "xyy-ziliao",
+    "description": null,
+    "sort": 5,
+    "state": null,
+    "children": [
+      {
+        "id": "19",
+        "name": "客户管理",
+        "url": "",
+        "p_id": "6",
+        "priority": 1,
+        "icon": null,
+        "description": "",
+        "sort": 1,
+        "state": null,
+        "children": null
+      },
+      {
+        "id": "37",
+        "name": "车辆分组",
+        "url": "company/toCompanyPage",
+        "p_id": "6",
+        "priority": 1,
+        "icon": null,
+        "description": "",
+        "sort": 2,
+        "state": null,
+        "children": null
+      }
+    ]
+  },
+  {
+    "id": "7",
+    "name": "微信管理",
+    "url": null,
+    "p_id": "1",
+    "priority": 1,
+    "icon": "icon-guanli",
+    "description": null,
+    "sort": 6,
+    "state": null,
+    "children": [
+      {
+        "id": "20",
+        "name": "代理商管理",
+        "url": null,
+        "p_id": "7",
+        "priority": 1,
+        "icon": null,
+        "description": null,
+        "sort": 0,
+        "state": null,
+        "children": null
+      }
+    ]
+  }
+]

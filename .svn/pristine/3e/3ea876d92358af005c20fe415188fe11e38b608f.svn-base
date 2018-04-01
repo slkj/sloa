@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.slkj.sloa.mapper.OrderMapper">
+	<sql id="sql_temp">
+		id,orderNumber ,carNumber ,purpose ,deviceNumber ,devicePice ,proveNumber ,
+		provePice,simNumber ,simPice ,cardNumber ,cardPice ,cardNumber1 ,
+		cardPice1 ,fees,feesPice ,agent ,riqi,paystate,state,startTime,endTime
+		,depCode
+	</sql>
+	<select id="getAll" resultType="Orders" parameterType="hashmap">
+		SELECT
+		*
+		FROM oa_order
+		<where>
+
+		</where>
+	</select>
+
+	<insert id="add" parameterType="Orders">
+		INSERT INTO oa_order (orderNumber ,carNumber ,purpose ,deviceNumber ,devicePice ,proveNumber ,provePice,simNumber ,
+		simPice ,cardNumber ,cardPice ,cardNumber1 ,cardPice1 ,fees,feesPice ,agent ,riqi ,depCode,startTime,endTime )
+		VALUES(#{orderNumber },#{carNumber },#{purpose },#{deviceNumber },#{devicePice },#{proveNumber },#{provePice},#{simNumber },
+		#{simPice},#{cardNumber },#{cardPice },#{cardNumber1 },#{cardPice1 },#{fees},#{feesPice },#{agent },#{riqi },#{depCode},#{startTime},#{endTime})
+
+	</insert>
+
+	<update id="update" parameterType="Orders">
+
+	</update>
+
+	<update id="pay" parameterType="Orders">
+
+	</update>
+</mapper>

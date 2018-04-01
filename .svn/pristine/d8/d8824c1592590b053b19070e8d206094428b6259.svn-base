@@ -1,0 +1,17 @@
+package cn.slkj.sloa.controller.weixin;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/weixin")
+public class WeixinController {
+
+	 
+	@RequestMapping("/order/toOrderPage")
+	public String toFeesPage() {
+		return "weixin/orders";
+	}
+
+	 
+}

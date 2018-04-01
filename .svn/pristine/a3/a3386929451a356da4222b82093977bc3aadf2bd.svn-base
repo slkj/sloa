@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.slkj.sloa.mapper.WeixinMapper">
+	<sql id="sql_temp">
+		id,state,type,carNumber,owner,purpose,phone,deadline,prove,remark,
+		colAmounts,riqi,payee,qr_time,orderNumber,pay_time 
+	</sql>
+	<select id="getAll" resultType="Weixin" parameterType="hashmap">
+		SELECT
+		id,state,type,carNumber,owner,purpose,phone,deadline,prove,remark,
+		colAmounts,riqi,payee,qr_time,orderNumber,pay_time
+		FROM oa_weixin
+		<where>
+			<if test="state != null and state != ''">AND state LIKE '%'+#{state}+'%'</if>
+			<if test="type != null and type != ''">AND type LIKE '%'+#{type}+'%'</if>
+			<if test="carNumber != null and carNumber != ''">AND carNumber LIKE '%'+#{carNumber}+'%'</if>
+			<if test="owner != null and owner != ''">AND owner LIKE '%'+#{owner}+'%'</if>
+			<if test="purpose != null and purpose != ''">AND purpose LIKE '%'+#{purpose}+'%'</if>
+			<if test="phone != null and phone != ''">AND phone LIKE '%'+#{phone}+'%'</if>
+			<if test="deadline != null and deadline != ''">AND deadline LIKE '%'+#{deadline}+'%'</if>
+			<if test="prove != null and prove != ''">AND prove LIKE '%'+#{prove}+'%'</if>
+			<if test="remark != null and remark != ''">AND remark LIKE '%'+#{remark}+'%'</if>
+			<if test="colAmounts != null and colAmounts != ''">AND colAmounts LIKE '%'+#{colAmounts}+'%'</if>
+			<if test="riqi != null and riqi != ''">AND riqi LIKE '%'+#{riqi}+'%'</if>
+			<if test="riqiStart != null and riqiStart != ''">AND riqi > #{riqiStart}  </if>
+			<if test="riqiEnd != null and riqiEnd != ''">AND riqi &lt; #{riqiEnd} </if>
+			<if test="payee != null and payee != ''">AND payee LIKE '%'+#{payee}+'%'</if>
+			<if test="qr_time != null and qr_time != ''">AND qr_time LIKE '%'+#{qr_time}+'%'</if>
+			<if test="orderNumber != null and orderNumber != ''">AND orderNumber LIKE '%'+#{orderNumber}+'%'</if>
+			<if test="pay_time != null and pay_time != ''">AND pay_time LIKE '%'+#{pay_time}+'%'</if>
+		</where>
+	</select>
+
+	<update id="update" parameterType="Weixin">
+		UPDATE oa_weixin SET
+		colAmounts = #{colAmounts}
+		WHERE ID = #{id}
+	</update>
+
+	<update id="pay" parameterType="Weixin">
+		UPDATE oa_weixin SET
+		state =
+		#{state},
+		pay_time = #{pay_time}
+		WHERE ID = #{id}
+	</update>
+</mapper>

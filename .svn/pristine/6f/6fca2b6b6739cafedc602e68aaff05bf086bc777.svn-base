@@ -1,0 +1,129 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>微信订单</title>
+<%@ include file="/common/taglibs.jsp"%>
+<script type="text/javascript">
+	var grid;
+	$(function() {
+
+		// 加载列表数据
+		loadDataGrid();
+		// 初始化用户操作按钮
+		// 	loadJSPButton();
+		// 点击查询，根据条件检索
+		$("#search_btn").click(function() {
+			$('#listGrid').datagrid({
+				queryParams : {
+					carNumber : $('#cph').val(),
+					number : $('#numberTop').val(),
+					endTime : $('#endTime').val(),
+					endTime1 : $('#endTime1').val(),
+					department : $("#h_department").combotree("getValue"),
+					purpose : $('#purpose').combobox('getValue'),
+					fees : $('#fees').combobox('getValue')
+				}
+			});
+			$('#gridForm').form('clear');
+		});
+	});
+	/*加载数据*/
+	function loadDataGrid() {
+		grid = $('#listGrid').datagrid({
+			// 			url : '../fees/list',
+			fit : true,
+			fitColumns : true,
+			nowrap : true, // false:折行
+			rownumbers : true, // 行号
+			striped : true, // 隔行变色
+			singleSelect : true,
+			checkOnSelect : true,
+			autoRowHeight : false,
+			pagination : true,
+			pageSize : 20,
+			pageList : [ 10, 20, 30, 50, 100 ],
+			loadMsg : '数据加载中,请稍后……',
+			columns : [ [ {
+				field : 'carNumber',
+				title : '状态'//待处理 or 已支付
+			},{
+				field : 'carNumber',
+				title : '订单类型'//续费 or 新装
+			}, {
+				field : 'carNumber',
+				title : '车牌号'
+			}, {
+				field : 'owner',
+				title : '所属企业',
+			}, {
+				field : 'purpose',
+				title : '业户名称'
+			}, {
+				field : 'startTime',
+				title : '电话'
+			}, {
+				field : 'agent',
+				title : '缴费期限'
+			}, {
+				field : 'agent',
+				title : '证明索取'
+			}, {
+				field : 'remark',
+				title : '备注'
+			}, {
+				field : 'colAmounts',
+				title : '收费标准',
+				align : 'right',
+				styler : function(value, row, index) {
+					return 'color:red;';
+				},
+				formatter : function(val, row, index) {
+					return '&yen; ' + row.colAmounts;
+
+				}
+			}, {
+				field : 'riqi',
+				title : '下单时间',
+				sortable : true
+			}, {
+				field : 'payee',
+				title : '审核员'
+			}, {
+				field : 'qr_time',
+				title : '操作时间'
+			} ] ],
+			onLoadSuccess : function() {
+				grid.datagrid('clearSelections');
+			}
+		});
+		// 设置分页控件
+		grid.datagrid('getPager').pagination({
+			beforePageText : '第',// 页数文本框前显示的汉字
+			afterPageText : '页    共 {pages} 页',
+			displayMsg : '当前显示 {from} - {to} 条记录   共 {total} 条记录'
+		});
+	}
+</script>
+<body class="easyui-layout">
+	<div region="north" style="height: 80px; border-bottom: 1px #a7b1c2 dashed; padding: 5px;">
+		<form id="gridForm">
+			<div class="item">
+				<div id="cot">
+					<div class="shang">
+						车牌号：<input type="text" id="cph" style="width: 150px" /> 下单时间：<input id="endTime" class="Wdate" type="text" onFocus="WdatePicker({isShowClear:false,readOnly:true})" /> - <input id="endTime1"
+							class="Wdate" type="text" onFocus="WdatePicker({isShowClear:false,readOnly:true})" />
+					</div>
+					<div class="xia">
+						用户名称：<input type="text" id="numberTop" style="width: 150px" /> <a id="search_btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div region="center">
+		<table id="listGrid"></table>
+	</div>
+</body>
+</html>

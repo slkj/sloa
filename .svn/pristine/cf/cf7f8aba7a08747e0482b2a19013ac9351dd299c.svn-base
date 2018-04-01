@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC
+        "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<typeAliases>
+		<typeAlias alias="LinkedCaseInsensitiveMap"
+			type="org.springframework.util.LinkedCaseInsensitiveMap" />
+		<typeAlias alias="pd" type="cn.slkj.hbsl.util.PageData" />
+		<typeAlias alias="User" type="cn.slkj.sloa.entity.system.User" />
+		<typeAlias alias="Role" type="cn.slkj.sloa.entity.system.Role" />
+		<typeAlias alias="Module" type="cn.slkj.sloa.entity.system.Module" />
+		<typeAlias alias="Department" type="cn.slkj.sloa.entity.system.Department" />
+		<typeAlias alias="Fees" type="cn.slkj.sloa.entity.shfw.Fees" />
+		<typeAlias alias="Prove" type="cn.slkj.sloa.entity.stock.Prove" />
+		<typeAlias alias="Devices" type="cn.slkj.sloa.entity.stock.Devices" />
+		<typeAlias alias="Call" type="cn.slkj.sloa.entity.shfw.Call" />
+		<typeAlias alias="Weixin" type="cn.slkj.sloa.entity.shfw.Weixin" />
+		<typeAlias alias="Devices_record" type="cn.slkj.sloa.entity.stock.Devices_record" />
+		<typeAlias alias="Sim" type="cn.slkj.sloa.entity.stock.Sim" />
+		<typeAlias alias="Driver" type="cn.slkj.sloa.entity.shfw.Driver" />
+		<typeAlias alias="ReturnVist" type="cn.slkj.sloa.entity.shfw.ReturnVist" />
+		<typeAlias alias="Repair" type="cn.slkj.sloa.entity.shfw.Repair" />
+		<typeAlias alias="Insurance" type="cn.slkj.sloa.entity.vehicle.Insurance" />
+		<typeAlias alias="Vehicle" type="cn.slkj.sloa.entity.vehicle.Vehicle" />
+		<typeAlias alias="Transfer" type="cn.slkj.sloa.entity.vehicle.Transfer" />
+		<typeAlias alias="License" type="cn.slkj.sloa.entity.vehicle.License" />
+		<typeAlias alias="Company" type="cn.slkj.sloa.entity.system.Company" />
+		<typeAlias alias="Prove_record" type="cn.slkj.sloa.entity.stock.Prove_record" />
+		<typeAlias alias="Dispatch" type="cn.slkj.sloa.entity.shfw.Dispatch" />
+		<typeAlias alias="Orders" type="cn.slkj.sloa.entity.Orders" />
+	</typeAliases>
+	<plugins>
+		<plugin
+			interceptor="com.github.miemiedev.mybatis.paginator.OffsetLimitInterceptor">
+			<property name="dialectClass"
+				value="com.github.miemiedev.mybatis.paginator.dialect.SQLServer2005Dialect" />
+		</plugin>
+	</plugins>
+
+</configuration>

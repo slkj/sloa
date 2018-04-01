@@ -1,0 +1,241 @@
+package cn.slkj.sloa.controller.shfw.dispatch;
+
+/**
+ * 派工登记   控制层
+ * 
+ * @author xiaotianliang
+ *
+ */
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.github.miemiedev.mybatis.paginator.domain.Order;
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.github.miemiedev.mybatis.paginator.domain.PageList;
+
+import cn.slkj.hbsl.util.Const;
+import cn.slkj.hbsl.util.javaUtil.StringUtil;
+import cn.slkj.hbsl.util.javaUtil.UUIDUtils;
+import cn.slkj.hbsl.util.javaUtil.date.DateStyle;
+import cn.slkj.hbsl.util.javaUtil.date.DateUtil;
+import cn.slkj.sloa.entity.shfw.Dispatch;
+import cn.slkj.sloa.entity.system.User;
+import cn.slkj.sloa.service.DispatchService;
+import cn.slkj.sloa.util.easyuiUtil.EPager;
+import cn.slkj.sloa.util.easyuiUtil.JsonResult;
+import net.sf.json.JSONObject;
+
+@Controller
+@RequestMapping("/dispatch")
+public class DispatchController {
+	private static Logger log = LoggerFactory
+			.getLogger(DispatchController.class);
+	@Autowired
+	private DispatchService dispatchService;
+
+	@RequestMapping("/toDispatchPage")
+	public String toDispatchPage() {
+		return "shfw/dispatch/dispatch";
+	}
+
+	@RequestMapping("/toDispatchAdd")
+	public String toDispatchAdd() {
+		return "shfw/dispatch/dispatchAdd";
+	}
+
+	@RequestMapping(value = "/list", method = { RequestMethod.POST })
+	@ResponseBody
+	public EPager<Dispatch> list(HttpServletRequest request) {
+		HashMap<String, Object> pageMap = new HashMap<String, Object>();
+		int page = Integer.parseInt(request.getParameter("page"));
+		int rows = Integer.parseInt(request.getParameter("rows"));
+
+		pageMap.put("dispatchNum", request.getParameter("dispatchNum"));
+		pageMap.put("personnelName", request.getParameter("personnelName"));
+		pageMap.put("department", request.getParameter("department"));
+		pageMap.put("carNumber", request.getParameter("carNumber"));
+		pageMap.put("repairTime", request.getParameter("repairTime"));
+		pageMap.put("repairTime1", request.getParameter("repairTime1"));
+		pageMap.put("type", request.getParameter("type"));
+		pageMap.put("outcome", request.getParameter("outcome"));
+		pageMap.put("personnel", request.getParameter("personnel"));
+		// 排序
+		String sort = request.getParameter("sort");
+		String order = request.getParameter("order");
+		String sortString = "";
+		if (!StringUtil.isEmpty(sort) && !StringUtil.isEmpty(order)) {
+			sortString = sort + "." + order;
+		}
+		if (StringUtil.isEmpty(sortString)) {
+			sortString = "repairTime.desc";
+		}
+		PageBounds pageBounds = new PageBounds(page, rows,
+				Order.formString(sortString));
+
+		List<Dispatch> list = dispatchService.getAll(pageMap, pageBounds);
+		PageList pageList = (PageList) list;
+		return new EPager<Dispatch>(pageList.getPaginator().getTotalCount(),
+				list);
+	}
+
+	private static final String APPLICATION_JSON = "application/json; charset=utf-8";
+
+	private static final String CONTENT_TYPE_TEXT_JSON = "text/json";
+
+	/**
+	 * 设备添加
+	 * 
+	 * @param devices
+	 * @return
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 * @throws ClientProtocolException
+	 */
+	@RequestMapping(value = "/insert", method = { RequestMethod.POST })
+	@ResponseBody
+	public boolean addDevices(HttpSession session, Dispatch dispatch)
+			throws Exception {
+		dispatch.setId(UUIDUtils.uuid());
+		dispatch.setDispatchNum(getTaskNum());
+
+		User suser = (User) session.getAttribute(Const.SESSION_USER);
+		dispatch.setOperatorId(suser.getId());
+		dispatch.setOperator(suser.getRealname());
+		dispatch.setDepartment(suser.getDepartcode());
+		dispatch.setOutcome(0);
+		dispatch.setOperatorTime(DateUtil.DateToString(new Date(),
+				DateStyle.YYYY_MM_DD_HH_MM));
+		int i = dispatchService.insert(dispatch);
+		if (i > 0) {
+			// 3.获取了code后，根据code和access_token来获取钉钉用户的个人信息，用下面的方法获取token
+			String token = getToken();// 获取token
+			// 获取用户信息
+			HttpClient httpClient = new DefaultHttpClient();
+			URI url = new URI(
+					"https://oapi.dingtalk.com/message/send?access_token="
+							+ token);
+			String json = "{\"touser\":\"01410435597868\",\"agentid\":\"7935645\",\"msgtype\": \"oa\",      \"oa\": {         \"message_url\": \"http://dingtalk.com\",         \"head\": {             \"bgcolor\": \"FFBBBBBB\",             \"text\": \"头部标题\"         },         \"body\": {             \"title\": \"正文标题\",             \"form\": [                 {                     \"key\": \"姓名:\",                     \"value\": \"张三\"                 },                 {                     \"key\": \"年龄:\",                     \"value\": \"20\"                 },                 {                     \"key\": \"身高:\",                     \"value\": \"1.8米\"                 },                 {                     \"key\": \"体重:\",                     \"value\": \"130斤\"                 },                 {                     \"key\": \"学历:\",                     \"value\": \"本科\"                 },                 {                     \"key\": \"爱好:\",                     \"value\": \"打球、听音乐\"                 }             ],             \"rich\": {                 \"num\": \"15.6\",                 \"unit\": \"元\"             },             \"content\": \"大段文本大段文本大段文本大段文本大段文本大段文本大段文本大段文本大段文本大段文本大段文本大段文本\",             \"image\": \"@lADOADmaWMzazQKA\",             \"file_count\": \"3\",             \"author\": \"李四 \"         }     }}";
+			String encoderJson = URLEncoder.encode(json, HTTP.UTF_8);
+			HttpPost httpPost = new HttpPost(url);
+			httpPost.addHeader(HTTP.CONTENT_TYPE, APPLICATION_JSON);
+			httpPost.setHeader("Accept", "application/json");
+			StringEntity se = new StringEntity(encoderJson);
+			se.setContentType(CONTENT_TYPE_TEXT_JSON);
+			se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE,
+					APPLICATION_JSON));
+			httpPost.setEntity(se);
+			HttpResponse response = httpClient.execute(httpPost);
+			HttpEntity entity = response.getEntity();
+
+			if (entity != null) {
+				JSONObject jsonObject = JSONObject.fromObject(EntityUtils
+						.toString(entity));
+				if (jsonObject.getInt("errcode") == 0) {
+					System.out.println("-----------------------");
+				}
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// 获取token的方法
+	public static String getToken() throws ClientProtocolException,
+			IOException, URISyntaxException {
+		HttpClient httpClient = new DefaultHttpClient();
+		URI url = new URI(
+				"https://oapi.dingtalk.com/gettoken?corpid=ding7265dba91f03ed02&corpsecret=j9tFTUwPqrHoqawQfV_AoTskGBOsH62sgTpEVZCI8Sf63anOUZMAcBd4LZlN1L94");
+		HttpGet get = new HttpGet(url);
+		HttpResponse response = httpClient.execute(get);
+		HttpEntity entity = response.getEntity();
+		if (entity != null) {
+			JSONObject jsonObject = JSONObject.fromObject(EntityUtils
+					.toString(entity));
+			if (jsonObject.getInt("errcode") == 0) {
+				return jsonObject.getString("access_token").toString();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * 根据id查询
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/queryOne")
+	@ResponseBody
+	public Dispatch queryOne(String id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		return dispatchService.queryOne(map);
+	}
+	@RequestMapping("/getByNum")
+	@ResponseBody
+	public Dispatch getByNum(String dispatchNum) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("dispatchNum", dispatchNum);
+		return dispatchService.queryOne(map);
+	}
+	private String getTaskNum() {
+		SimpleDateFormat sf = new SimpleDateFormat("yyyyMMddHHmmss");
+		String formatDate = sf.format(new Date());
+		int random = new Random().nextInt(10000);
+		return formatDate + random;
+	}
+	
+	/**
+	 * 删除派工登记记录
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/delete")
+	public JsonResult deletes(String id) {
+		int i = dispatchService.delete(id);
+		try {
+			if (i > 0) {
+				return new JsonResult(true, "删除成功。");
+			} else {
+				return new JsonResult(false, "删除失败。");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new JsonResult(false, "操作异常。");
+		}
+	}
+
+}

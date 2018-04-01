@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>神龙智能办公系统</title>
+<meta name="viewport"
+	content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no,initial-scale=1, minimum-scale=1, maximum-scale=1;" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+
+<link rel="stylesheet" href="../css/m.common.css" />
+</head>
+<body class="mWrap">
+
+	<header class="topHd"> <a onClick="history.back();return false;" href="#" class="back">返回</a>
+	<a href="../index.html" class="home">首页</a> <span>车辆档案查询 </span> </header>
+	<section class="mContent">
+	<div class="tab">
+		<a href="javascript:void(0);" class="current"><i></i>热门游戏</a><a href="javascript:void(0);">最近浏览</a>
+	</div>
+	<div>
+		<ul class="tlist column2 showOne pusht">
+			<li><a href="list.html">忘仙</a></li>
+			<li><a href="#">神魔</a></li>
+			<li><a href="#">仙变</a></li>
+			<li><a href="#">时空猎人</a></li>
+			<li><a href="#">魔与道 </a></li>
+			<li><a href="#">九州OL</a></li>
+			<li><a href="#">世界OL</a></li>
+			<li><a href="#">诛神OL</a></li>
+		</ul>
+		<ul class="tlist historyList pusht">
+		</ul>
+	</div>
+	</section>
+
+</body>
+</html>

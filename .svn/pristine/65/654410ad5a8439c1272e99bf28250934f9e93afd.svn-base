@@ -1,0 +1,75 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>神龙智能办公系统</title>
+<meta name="viewport"
+	content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no,initial-scale=1, minimum-scale=1, maximum-scale=1;" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+
+<link rel="stylesheet" href="css/m.common.css" />
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$("#hlkOK").click(function() {
+// 			window.location.href = "index.html";
+			var user = {
+				// 				type : $("#type").val(),
+				username : $("#username").val(),
+				password : $("#password").val()
+			};
+			if (user.username == "" || user.password == "") {
+				alert("用户名或密码为空，请重新输入！");
+				return;
+			} else {
+				loginAjax();
+			}
+		});
+
+	});
+	//用户登录
+	function loginAjax() {
+		var user = {
+			username : $("#username").val(),
+			password : $("#password").val()
+		};
+		$.ajax({
+			url : "../user/login",
+			type : "post",
+			data : user,
+			success : function(data) {
+				if (data.success) {
+					window.location.href = "index.jsp";
+				} else {
+					alert("账号信息错误");
+				}
+			}
+		});
+	}
+</script>
+</head>
+<body class="mWrap">
+	<header class="topHd"> <a href="javascript:pageBack();" class="back">返回</a> <a
+		href="index.html" class="home">首页</a> <span>会员登录</span> </header>
+	<section class="mContent">
+
+	<form id="loginForm" method="post">
+		<input type="hidden" name="random" id="random" value="" /> <input type="hidden" name="lbbrowser"
+			id="lbbrowser" value="webbrowser" /> <input type="hidden" id="macaddress" name="macaddress"
+			value="" /> <input type="hidden" name="comeback" value="" />
+		<s:token />
+		<ul class="form">
+			<li><input type="text" class="input" placeholder="用户名：" id="username" name="username" /></li>
+			<li><input type="password" class="input" placeholder="密   码：" id="password" /></li>
+			<li class="btnArea"><input type="button" id="hlkOK" class="btn" value="登&nbsp;&nbsp;录" /></li>
+			<li class="noLogin"><a href="#" class="right">忘记密码</a><a href="#">用户注册</a></li>
+		</ul>
+	</form>
+	</section>
+
+</body>
+</html>
