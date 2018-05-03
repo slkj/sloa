@@ -13,9 +13,11 @@
 
 <script type="text/javascript">
 	function toWeixiu() {
+		var ip=$("#ipText").val();
 		var data = $("#cphText").val();
-		var url = "http://hbslkj.com:89/Interface/findPosition.action?carNum=" + data;
+		var url = "http://"+ip+":89/Interface/findPosition.action?carNum=" + data;
 // 		window.location.href = url;
+
 		$('#mapIframe').attr('src',url);
 	}
 </script>
@@ -26,6 +28,10 @@
 	<section class="mContent"> <article class="cttBg">
 	<form id="dataInfo" metdod="post">
 		<ul class="form">
+			<li>服务器地址：<select id="ipText" style="width: 50%" >
+				  <option value="219.148.86.152">普货</option>
+				  <option value="219.148.86.148">危货</option>
+				</select> 
 			<li>车牌号：<input id="cphText" type="text" style="width: 50%" /></li>
 		</ul>
 	</form>
