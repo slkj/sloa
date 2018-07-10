@@ -161,8 +161,10 @@
 	<ul class="mainmenu">
 		<li><a href="paiqiandan/list.jsp"><b><img src="images/tb02.png" /></b><span>派检单</span></a></li>
 		<li><a href="weixiu/list.jsp"><b><img src="images/tb06.png" /></b><span>维修记录</span></a></li>
-<!-- 		<li><a href="weixiu/addInfo.jsp"><b><img src="images/tb03.png" /></b><span>维修登记</span></a></li> -->
-		<li><a href="toDW.jsp"><b><img src="images/tb05.png" /></b><span>定位查询</span></a></li>
+	<li><a href="weixiu/list.jsp"><b><img src="images/tb06.png" /></b><span>维修记录</span></a></li>
+ 		<li><a href="http://mobileapp.gghypt.net/platformapp/wechat/servicer-search.html"><b><img src="images/tb03.png" /></b><span>服务商查询</span></a></li> 
+		<li><a href="https://zhiyunopenh5.gghypt.net/platform/validate.html?src=2"><b><img src="images/tb03.png" /></b><span>车辆信息验证</span></a></li> 
+	<li><a href="toDW.jsp"><b><img src="images/tb05.png" /></b><span>定位查询</span></a></li>
 		<li><a href="car/addInfo.jsp"><b><img src="images/tb01.png" /></b><span>添加车辆</span></a></li>
 		<li><a href="sfbzInfo.jsp"><b><img src="images/tb08.png" /></b><span>收费标准</span></a></li>
 <!-- 				<li><a href="/"><b><img src="images/tb04.png" /></b><span>设备查询</span></a></li> -->

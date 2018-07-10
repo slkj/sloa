@@ -29,6 +29,8 @@
 		<typeAlias alias="Company" type="cn.slkj.sloa.entity.system.Company" />
 		<typeAlias alias="Prove_record" type="cn.slkj.sloa.entity.stock.Prove_record" />
 		<typeAlias alias="Dispatch" type="cn.slkj.sloa.entity.shfw.Dispatch" />
+		
+		<typeAlias alias="PayFees" type="cn.slkj.sloa.entity.shfw.PayFees" />
 	</typeAliases>
 	<plugins>
 		<plugin

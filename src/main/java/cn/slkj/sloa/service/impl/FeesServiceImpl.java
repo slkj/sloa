@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 
 import cn.slkj.sloa.entity.shfw.Fees;
+import cn.slkj.sloa.entity.shfw.PayFees;
 import cn.slkj.sloa.entity.vehicle.Vehicle;
 import cn.slkj.sloa.mapper.FeesMapper;
 import cn.slkj.sloa.service.FeesService;
@@ -72,6 +73,19 @@ public class FeesServiceImpl implements FeesService {
 	@Override
 	public Fees getCarFeesByWx(HashMap<String, Object> map) {
 		return mapper.getCarFeesByWx(map);
+	}
+	
+	
+//	收费记录
+	@Override
+	public List<PayFees> listPayFees(HashMap<String, Object> pageMap, PageBounds pageBounds) {
+		// TODO Auto-generated method stub
+		return mapper.listByPayFees(pageMap, pageBounds);
+	}
+	@Override
+	public int payFees(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		return mapper.payFees(map);
 	}
 
 }

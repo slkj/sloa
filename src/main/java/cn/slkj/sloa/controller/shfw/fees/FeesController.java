@@ -21,6 +21,7 @@ import cn.slkj.hbsl.util.Const;
 import cn.slkj.hbsl.util.javaUtil.StringUtil;
 import cn.slkj.hbsl.util.javaUtil.UUIDUtils;
 import cn.slkj.sloa.entity.shfw.Fees;
+import cn.slkj.sloa.entity.shfw.PayFees;
 import cn.slkj.sloa.entity.system.User;
 import cn.slkj.sloa.entity.vehicle.Vehicle;
 import cn.slkj.sloa.service.FeesService;
@@ -55,8 +56,16 @@ public class FeesController {
 	}
 	@RequestMapping("/feesOut")
 	public String toFeesOut() {
-		System.out.println("----");
-		return "shfw/fees/feesOut";
+ 		return "shfw/fees/feesOut";
+	}
+	//跳转车辆缴费记录
+	@RequestMapping("/payFeesList")
+	public String payFeesLis() {
+ 		return "shfw/fees/payFeesList";
+	}
+	@RequestMapping("/toPayFeesAdd")
+	public String toPayFeesAdd() {
+		return "shfw/fees/payFeesAdd";
 	}
 	@RequestMapping(value = "/list", method = { RequestMethod.POST })
 	public @ResponseBody EPager<Fees> list(HttpServletRequest request) {
@@ -209,5 +218,67 @@ public class FeesController {
 		}
 		return new JsonResult(false, "失败！");
 	}
+	
+	
+	/*收费记录*/
+	@RequestMapping(value = "/listPayFees", method = { RequestMethod.POST })
+	public @ResponseBody EPager<PayFees> listPayFees(HttpServletRequest request) {
+		HashMap<String, Object> pageMap = new HashMap<String, Object>();
+		int page = Integer.parseInt(request.getParameter("page"));
+		int rows = Integer.parseInt(request.getParameter("rows"));
+		 
+		 
+		pageMap.put("carNumber", request.getParameter("carNumber"));
+		pageMap.put("sfriqi", request.getParameter("sfriqi"));
+		pageMap.put("sfriqi1", request.getParameter("sfriqi1"));
+
+		// 排序
+		String sort = request.getParameter("sort");
+		String order = request.getParameter("order");
+		String sortString = "";
+		if (!StringUtil.isEmpty(sort) && !StringUtil.isEmpty(order)) {
+			sortString = sort + "." + order;
+		}
+		if (StringUtil.isEmpty(sortString)) {
+			sortString = "initriqi.desc";
+		}
+		PageBounds pageBounds = new PageBounds(page, rows, Order.formString(sortString));
+		List<PayFees> list = feesService.listPayFees(pageMap, pageBounds);
+		PageList pageList = (PageList) list;
+		return new EPager<PayFees>(pageList.getPaginator().getTotalCount(), list);
+	}
+	
+	
+	/** 服务费收取 */
+	@ResponseBody
+	@RequestMapping(value = "/payFees")
+	public JsonResult payFees(String carNumber, String owner, String fees, 
+			String sfry, String sfriqi, String startTime, String endTime, String purpose, 
+			String companyName, String remark, String ownerTel, HttpServletRequest request) {
+		try {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("carNumber", carNumber);
+			map.put("owner", owner);
+			map.put("fees", fees);
+			map.put("sfry", sfry);
+			map.put("sfriqi", sfriqi);
+			map.put("startTime", startTime);
+			map.put("endTime", endTime);
+			map.put("purpose", purpose);
+			map.put("remark", remark);
+			map.put("companyName", companyName);
+			map.put("ownerTel",ownerTel);
+			
+			int i = feesService.payFees(map);
+			if (i != -1) {
+				return new JsonResult(true, "OK");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new JsonResult(false, "失败！");
+		}
+		return new JsonResult(false, "失败！");
+	}
+
 
 }

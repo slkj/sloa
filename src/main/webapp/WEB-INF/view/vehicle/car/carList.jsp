@@ -80,7 +80,7 @@
 				field : 'contacts',
 				title : '联系人',
 				align : 'center',
-				width : 80
+				width : 180
 			}, {
 				field : 'contactsTel',
 				title : '联系电话',

@@ -6,6 +6,7 @@ import java.util.List;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 
 import cn.slkj.sloa.entity.shfw.Fees;
+import cn.slkj.sloa.entity.shfw.PayFees;
 import cn.slkj.sloa.entity.vehicle.Vehicle;
 
 public interface FeesService {
@@ -31,6 +32,11 @@ public interface FeesService {
 	public int updateVehicle(HashMap<String, Object> map);
 
 	public Vehicle getFeesByCarNum(HashMap<String, Object> hashMap);
-	
+
 	public Fees getCarFeesByWx(HashMap<String, Object> map);
+
+	/* 收费记录 */
+	public List<PayFees> listPayFees(HashMap<String, Object> pageMap, PageBounds pageBounds);
+	
+	public int payFees(HashMap<String, Object> map);
 }

@@ -195,7 +195,7 @@
 							data : data,
 							async : false,
 							success : function(data) {
-								if (data) {
+								if (data.success) {
 									SL.closeWindow();
 									grid.datagrid('reload');
 								} else {
@@ -509,6 +509,7 @@
 							class="Wdate" type="text" onFocus="WdatePicker({isShowClear:false,readOnly:true})" /> - <input id="endTime1" class="Wdate" type="text" onFocus="WdatePicker({isShowClear:false,readOnly:true})" />
 					</div>
 					<div class="xia">
+						证明编号：<input type="text" id="numberTop" style="width: 150px" />
 						类型：<select id="purpose" class="easyui-combobox" style="width: 100px;">
 							<option value=""></option>
 							<option value="0">新装</option>

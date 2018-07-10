@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 
 import cn.slkj.sloa.entity.shfw.Fees;
+import cn.slkj.sloa.entity.shfw.PayFees;
 import cn.slkj.sloa.entity.vehicle.Vehicle;
 
 @Repository
@@ -38,5 +39,12 @@ public interface FeesMapper {
 	public Vehicle getFeesByCarNum(HashMap<String, Object> hashMap);
 
 	public Fees getCarFeesByWx(HashMap<String, Object> map);
+
+	
+//	车辆缴费记录
+	public List<PayFees> listByPayFees(HashMap<String, Object> pageMap, PageBounds pageBounds);
+	
+	public int payFees(HashMap<String, Object> map);
+	
 
 }

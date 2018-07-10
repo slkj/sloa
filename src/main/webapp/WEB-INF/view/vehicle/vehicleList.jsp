@@ -67,7 +67,7 @@
 				field : 'carOwner',
 				title : '公司名称'
 			}, {
-				width : 80,
+				width : 180,
 				field : 'contacts',
 				title : '联系人'
 			}, {
